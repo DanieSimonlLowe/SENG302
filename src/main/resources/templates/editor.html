@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<!--suppress Annotator -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head>
+        <title>Edit User Profile</title>
+        <div th:insert="~{fragments/general.html :: general_header}"/>
+        <link th:href="@{/css/editStyles.css}" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <!-- Navbar fragment -->
+        <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+        <section class="h-100">
+            <form method="post" th:action="@{edit}">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12">
+                            <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Your Details</h3>
+                                                <!-- Left hand side of editor -->
+
+                                                <form class="mx-1 mx-md-4">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6 mb-4 pb-2">
+                                                            <div class="form-outline">
+                                                                <label class="form-label requiredField" for="fName">First Name</label>
+                                                                <input type="text" id="fName" th:name="fName" th:value="${fName}"
+                                                                       class="form-control form-control-lg"
+                                                                       data-cy="fName" th:classappend="${invalidFName} ? is-invalid " required>
+                                                                <label class="invalid-feedback" th:text="${invalidFName}"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-4 pb-2">
+                                                            <div class="form-outline">
+                                                                <label class="form-label requiredField" for="lName">Last Name</label>
+                                                                <input type="text" id="lName" th:name="lName" th:value="${lName}"
+                                                                       class="form-control form-control-lg" th:classappend="${invalidLName} ? is-invalid" required>
+                                                                <label class="invalid-feedback" th:text="${invalidLName}"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="email">Email</label>
+                                                            <input type="email" id="email" class="form-control form-control-lg"
+                                                                   th:name="email" th:value="${email}" data-cy="email" th:classappend="${invalidEmail} ? is-invalid" required>
+                                                            <label class="invalid-feedback" id="invalidEmail" th:text="${invalidEmail}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="DOB">Date of Birth</label>
+                                                            <input type="date" id="DOB" class="form-control form-control-lg"
+                                                                   th:name="DOB" th:value="${DOB}" data-cy="DOB"
+                                                                   placeholder="DD/MM/YYYY" th:classappend="${invalidDOB} ? is-invalid" required>
+                                                            <label class="invalid-feedback" th:text="${invalidDOB}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label for="favSport" class="form-label">Favourite Sport:</label>
+                                                            <div class="input-group">
+                                                                <input list="sportsList" name="favSport" id="favSport" type="string" th:value="*{sport}" class="form-control form-control-lg" th:classappend="${invalidSport} ? is-invalid" aria-describedby="favSportHelp">
+                                                                <div class="datalist-container">
+                                                                    <datalist id="sportsList" th:utext="${sportOptions}"></datalist>
+                                                                </div>
+                                                                <div class="input-group-append">
+                                                                    <button class="btn-lg btn btn-dark p-sm-2" type="button" name="saveSport" id="saveSport" onclick="addSport()">Add Sport</button>
+                                                                </div>
+                                                            </div>
+                                                            <small for="favSport" id="favSportHelp" class="form-text text-muted">Double click to display common sports</small>
+                                                            <label id="invalidSport" style="color: #A33B20"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="margin-top-sm">
+                                                        <input type="hidden" id="favSportsList" name="favSportsList" th:value="${favSportsList}" data-cy="favSportsList" th:utext="${favSportsList}">
+                                                        <input type="hidden" id="favSportsListUpdated" name="favSportsListUpdated" value="false">
+                                                        <div class="favSportsDisplay" name="favSportsDisplay" id="favSportsDisplay" th:utext="${favSportsDisplay}"></div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <a id="changePassword" th:href="@{/user/updatePassword}">
+                                                            <button type="button" class="btn btn-dark btn-lg" style="margin-top: 15px;">Update Password</button>
+                                                        </a>
+                                                    </div>
+
+
+                                                </form>
+                                                <a id="cancel-btn" class="btn btn-dark btn-lg"
+                                                        data-mdb-ripple-color="dark" th:href="@{/profile}">Cancel</a>
+                                            </div>
+                                        </div>
+                                        <!-- Left hand side of edit user end -->
+                                        <!-- Right hand side of edit user -->
+
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Contact Details</h3>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address1" class="form-label">Address 1</label>
+                                                        <input type="text" id="form-address1" list="location-list" class="form-control form-control-lg"
+                                                               th:name="address1" th:value="${address1}" data-cy="address1" autocomplete="off"
+                                                               placeholder="Start typing your address..." oninput="onInput()" th:classappend="${invalidAddress1} ? is-invalid"/>
+                                                        <datalist id="location-list"></datalist>
+                                                        <label class="invalid-feedback" th:text="${invalidAddress1}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address2" class="form-label">Address 2</label>
+                                                        <input type="text" id="form-address2" class="form-control form-control-lg"
+                                                               th:name="address2" th:value="${address2}" data-cy="address2"
+                                                               th:classappend="${invalidAddress2} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidAddress2}"></label>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-5 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-postcode">Postcode</label>
+                                                            <input type="text" id="form-postcode" class="form-control form-control-lg"
+                                                                   autofocus th:name="postcode" th:value="${postcode}" data-cy="postcode"
+                                                                   th:classappend="${invalidPostcode} ? is-invalid"/>
+                                                            <label class="invalid-feedback" th:text="${invalidPostcode}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-7 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-suburb">Suburb</label>
+                                                            <input type="text" id="form-suburb" class="form-control form-control-lg"
+                                                                   autofocus th:name="suburb" th:value="${suburb}" data-cy="suburb"
+                                                                   th:classappend="${invalidSuburb} ? is-invalid"/>
+                                                            <label class="invalid-feedback" th:text="${invalidSuburb}"></label>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-city" class="form-label requiredField">City</label>
+                                                        <input type="text" id="form-city" class="form-control form-control-lg"
+                                                               th:name="city" th:value="${city}" required
+                                                               th:classappend="${invalidCity} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidCity}"></label>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-country" class="form-label requiredField">Country</label>
+                                                        <input type="text" id="form-country" class="form-control form-control-lg"
+                                                               th:name="country" th:value="${country}" required
+                                                               th:classappend="${invalidCountry} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidCountry}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <button id="save-button" type="submit" class="btn btn-dark btn-lg"
+                                                        data-mdb-ripple-color="dark">Save Changes</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <div th:insert="~{fragments/general.html :: general_footer}"></div>
+        <script th:src="@{/javascript/locationAPI.js}" type="text/javascript" defer></script>
+
+
+        <script th:inline="javascript">
+            let sportsList = [];
+            let sportsDisplayList = [];
+            let currentSport = document.getElementById('favSport');
+
+
+            /*<![CDATA[*/
+                let onlySportNames = /*[[${sportNames}]]*/ 'default';
+                let htmlSportsString = /*[[${sportHtml}]]*/ 'default';
+                sportsDisplayList = htmlSportsString.split(','); // LIST of html elements
+                if(sportsDisplayList.includes("")){
+                    sportsDisplayList.splice(sportsDisplayList.indexOf(""), 1);
+                }
+                document.getElementById('favSportsList').value = onlySportNames;
+            /*]]>*/
+
+            // Display the sports
+            function displaySports() {
+                const sportsDisplayContainer = document.getElementById('favSportsDisplay');
+
+                // Clear all children
+                while (sportsDisplayContainer.firstChild) {
+                    sportsDisplayContainer.removeChild(sportsDisplayContainer.firstChild);
+                }
+
+                onlySportNames.forEach(sport => {
+                    const sportContainer = document.createElement('div');
+                    const sportText = document.createElement('span');
+                    sportText.textContent = sport;
+
+                    const buttonElement = document.createElement('button');
+                    buttonElement.textContent = 'Delete';
+                    buttonElement.addEventListener('click', function() {
+                        deleteSport(sport);
+                    });
+                    buttonElement.id = 'delete'+sport;
+                    buttonElement.type = 'button';
+                    buttonElement.value = sport;
+
+                    sportContainer.appendChild(sportText);
+                    sportContainer.appendChild(buttonElement);
+
+                    sportsDisplayContainer.appendChild(sportContainer);
+                });
+
+                sportsDisplayContainer.scrollTop = sportsDisplayContainer.scrollHeight;
+            }
+
+            function isInvalid(string) {
+                return !(/^(?=.*\p{L})[\p{L}\s'-]*$/u.test(string));
+            }
+
+            function tooLong(string) {
+                return string.length > 200;
+            }
+
+
+            //Onclick to delete the favourite sport
+            function deleteSport(deletedSport) {
+                let sportIndex = onlySportNames.indexOf(deletedSport);
+                onlySportNames.splice(sportIndex, 1);
+                sportsDisplayList.splice(sportIndex, 1);
+                document.getElementById('favSportsList').value = onlySportNames;
+                displaySports();
+                document.getElementById('favSportsListUpdated').value = true;
+            }
+
+            //adding a sport to the user
+            function addSport() {
+                currentSport = document.getElementById('favSport');
+                currentSport.style.border = "1px solid #8f8f9d";
+                document.getElementById('invalidSport').textContent = "";
+
+                // Error checking
+                if (tooLong(currentSport.value)) {
+                    currentSport.style.border = "1px solid #A33B20";
+                    document.getElementById('invalidSport').textContent = "Sport name invalid - cannot be longer than 200 characters.";
+                } else if (isInvalid(currentSport.value)) {
+                    currentSport.style.border = "1px solid #A33B20";
+                    document.getElementById('invalidSport').textContent = "Sport name invalid - must only contain letters, spaces, apostrophes and dashes.";
+                } else if (onlySportNames.findIndex( item =>  (currentSport.value).toLowerCase() === item.toLowerCase()) != -1) {
+                    currentSport.style.border = "1px solid #A33B20";
+                    document.getElementById('invalidSport').textContent = "This sport is already marked as a favourite.";
+                } else {
+                    let capitalised = (currentSport.value)[0].toUpperCase() + (currentSport.value).slice(1).toLowerCase();
+                    onlySportNames.push(capitalised);
+                    document.getElementById('favSportsList').value = onlySportNames;
+                    sportsDisplayList.push("<div><span>" + capitalised + " </span><button onClick=\"deleteSport(this)\" id=\"delete" + capitalised + "\" type=\"button\" value=\"" + capitalised + "\">Delete</button></div>");
+                    displaySports();
+                    currentSport.value = '';
+                }
+                document.getElementById('favSportsListUpdated').value = true;
+            }
+            //Used to create the backup dropdown for older browsers
+            var sportsInput = document.getElementById('favSport');
+            if (!('list' in sportsInput) || !document.createElement('datalist').options) {
+                var sportsListFallback = document.getElementById('sportsListFallback');
+                sportsInput.setAttribute('list', 'sportsListFallback');
+                sportsListFallback.parentNode.replaceChild(sportsInput, sportsListFallback);
+            }
+        </script>
+
+
+    </body>
+</html>

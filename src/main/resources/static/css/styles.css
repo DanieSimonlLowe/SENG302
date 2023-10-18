@@ -1,0 +1,12 @@
+body {
+    background-color: #CBDAD6;
+}
+
+.outlined {
+    outline: #49b2e8 solid 3px;
+}
+
+.top-buffer {
+    margin-top:20px;
+    margin-bottom:20px;
+}

@@ -1,0 +1,24 @@
+body {
+    background-color: #eee
+}
+
+.main-body {
+    background-color: #FEFEFE;
+    width: 80%;
+}
+
+@media (min-width:550px) {
+    .activityDetails {
+        width: 75%
+    }
+}
+
+
+
+.activityDetails {
+    text-align: center;
+    background-color: #F6F7EB;
+    padding-top: 0.75rem;
+    padding-bottom: 1rem;
+    margin: 1rem;
+}

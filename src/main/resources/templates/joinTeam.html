@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head>
+        <link th:href="@{/css/loginStyles.css}" rel="stylesheet" type="text/css"/>
+        <div th:insert="~{fragments/general.html :: general_header}"></div>
+    </head>
+
+    <body>
+        <!-- Navbar fragment -->
+        <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+        <div class="homepage-body">
+                        <span class="top-left">
+                            <a th:href="@{/}" class="light-button-md">Cancel</a>
+                        </span>
+            <!-- Create an account "title" -->
+            <div class="centered-text">
+                <span class="tab-title">Join a team</span>
+            </div>
+
+            <div class="login-form-container">
+                <form th:action="@{joinTeam}" method="post">
+
+                    <div class="input-field">
+                        <label for="tokenInput" class="requiredField">Invitation Token</label>
+                        <input type="text" id="tokenInput" placeholder="Enter an invitation token: "
+                               th:name="invitationToken" th:value="*{invitationToken}" data-cy="invitationToken"
+                               th:classappend="${isError} ? error-input" required autofocus>
+                        <label id="error" class="error-label" th:text="${invalidToken} ? ${invalidToken} : ${error}"></label>
+                    </div>
+
+                    <div class="flex-bottom-container">
+                        <button type="submit" id="submit" class="dark-button-md">Join Team</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+        <div th:insert="~{fragments/general.html :: general_footer}"></div>
+    </body>
+</html>

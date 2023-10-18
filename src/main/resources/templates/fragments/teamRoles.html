@@ -1,0 +1,21 @@
+<div th:fragment="teamRolesEdit(entity)">
+    <div class="editRoles" th:id="${entity.teamMemberId.user.id}+'Fragment'" hidden>
+        <button class="close" th:id="${entity.teamMemberId.user.id}+'Close'" onclick="closeArea(this.id)">✕</button>
+        <button class="rmvBtn">Remove from team</button>
+        <div class="line"></div>
+        <div class="radio-button radioGroup" role="group" aria-label="Edit member roles">
+            <div class="radioGroupBtn">
+                <input type="radio" th:id="${entity.teamMemberId.user.id}+'Manager'" name="radios" value="all">
+                <label class="radioGroupLabel" th:id="${entity.teamMemberId.user.id}+'ManagerLabel'" for="${entity.teamMemberId.user.id}+'Manager'" onclick="checkClicked(this.id)">Manager</label>
+            </div>
+            <div class="radioGroupBtn">
+                <input type="radio" th:id="${entity.teamMemberId.user.id}+'Coach'" name="radios" value="false">
+                <label class="radioGroupLabel" th:id="${entity.teamMemberId.user.id}+'CoachLabel'" for="${entity.teamMemberId.user.id}+'Coach'" onclick="checkClicked(this.id)">Coach</label>
+            </div>
+            <div class="radioGroupBtn">
+                <input type="radio" th:id="${entity.teamMemberId.user.id}+'Member'" name="radios" value="true">
+                <label class="radioGroupLabel" th:id="${entity.teamMemberId.user.id}+'MemberLabel'" for="${entity.teamMemberId.user.id}+'Member'" onclick="checkClicked(this.id)">Member</label>
+            </div>
+        </div>
+    </div>
+</div>

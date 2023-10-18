@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+    <link th:href="@{/css/allprofilepageStyles.css}" rel="stylesheet">
+    <link th:href="@{/css/filterStyles.css}" rel="stylesheet">
+    <link th:href="@{/css/searchpageStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/profilePic.css}" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" th:src="@{/javascript/collapsible_button.js}" defer></script>
+
+    <meta charset="UTF-8">
+    <title>Team Analytics Builder</title>
+
+    <script>
+        let expandedSport = false;
+        let expandedCities = false;
+        function showSports() {
+            let checkboxesSport = document.getElementById("checkboxesSport");
+            let checkboxesCities = document.getElementById("checkboxesCities");
+            if (!expandedSport) {
+                checkboxesSport.style.display = "block";
+                checkboxesCities.style.display ="none"
+                expandedSport = true;
+                expandedCities = false;
+            } else {
+                checkboxesSport.style.display = "none";
+                expandedSport = false;
+            }
+        }
+        function showCities() {
+            let checkboxesSport = document.getElementById("checkboxesSport");
+            let checkboxesCities = document.getElementById("checkboxesCities");
+            if (!expandedCities) {
+                checkboxesCities.style.display = "block";
+                checkboxesSport.style.display ="none"
+                expandedCities = true;
+                expandedSport = false;
+            } else {
+                checkboxesCities.style.display = "none";
+                expandedCities = false;
+            }
+        }
+    </script>
+</head>
+<body>
+
+<!-- Navbar fragment -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:href="@{allTeams}" id="teamsTab">Teams</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page">Clubs</a>
+    </li>
+</ul>
+
+<div class="d-flex flex-column ps-sm-3 pe-3">
+    <div class="p-2 bd-highlight">
+        <div class="search-form-container ">
+            <form class="d-flex" th:action="@{searchClubs}" method="post">
+                <input type="hidden" name="previousSearchUri" th:value="${previousSearchUri}" />
+                <div class="search-box flex-search">
+                        <span class="flex-search-input"><input placeholder="Start typing.." id="clubSearch" autofcous type="text"
+                                                               th:name="search" th:value="*{search}" aria-labe="Search" th:classappend="${searchError} ? error-input" maxlength="100"></span>
+                    <button id="searchButton" class="dark-button-md" type="submit">Search</button>
+                </div>
+            </form>
+            <label id="errorLabel" class="error-label" th:text="${searchError}"></label>
+        </div>
+    </div>
+    <div class="p-2 bd-highlight">
+        <div class="d-flex flex-column-reverse flex-md-row">
+            <div class="d-flex w-100">
+                <div class="table-div flex-child-table">
+                    <span class="table-info">
+                        <tr th:unless="${entries.empty}">
+                            <th:block th:replace="~{fragments/searchFilters.html :: numEntries}"></th:block>
+                        </tr>
+                    </span>
+
+                    <div class="d-flex flex-wrap gap-2 my-2 justify-content-evenly">
+                        <div th:unless="${entries.empty}" th:each="club, iter : ${entries}">
+                            <div class="card h-100 d-flex justify-content-center align-items-center hover-card" style="width: 18rem;">
+                                <img class="card-img-top rounded-circle pt-2" style="width: 5rem; height: 5rem;" th:src="@{${club.profilePicName}}" th:alt="${club.name}">
+                                <div class="card-body">
+                                    <div>
+                                        <h5 class="card-title text-center fw-bold" th:text="${club.name}"></h5>
+                                        <p class="card-subtitle text-center" th:text="${club.sport != null ? club.sport : 'No sport to display'}"></p>
+                                    </div>
+                                    <p class="card-text text-center small pt-2" th:text="${club.location}"></p>
+                                </div>
+                                <a class="stretched-link " th:href="@{/clubProfile(clubId=${club.id})}"></a>
+                            </div>
+                        </div>
+
+                        <div th:if="${entries.empty}">
+                            <p class="text-md-center fst-italic" th:utext="${noClubsDisplay}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-fill align-self-end align-self-md-auto">
+                <th:block th:insert="~{fragments/searchFilters.html :: filterContent}"></th:block>
+            </div>
+        </div>
+    </div>
+    <div class="p-4 bd-highlight">
+        <th:block th:insert="~{fragments/pagination.html}"></th:block>
+    </div>
+</div>
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+</body>
+</html>
+

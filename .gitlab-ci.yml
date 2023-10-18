@@ -1,0 +1,103 @@
+stages:
+  - tagChecking
+  - build
+  - test
+  - sonarqube
+  - deploy
+  - e2eTests
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+
+tag-checker:
+  stage: tagChecking
+  script:
+    - python3 tag_checker.py $CI_COMMIT_TAG
+  only:
+    - tags
+
+junit:
+  stage: test
+  script:
+    - ./gradlew test
+    - ls ./build/jacoco
+  artifacts:
+    paths:
+      - build/jacoco/test-report.xml
+
+integration-tests:
+  stage: test
+  script: 
+    - ./gradlew integration
+
+sonarqube-report:
+  stage: sonarqube
+  script:
+    ./gradlew sonarqube
+
+# builds all branches, except dev and master
+branch-build:
+  stage: build
+  script:
+    - ./gradlew bootJar
+  artifacts:
+    paths:
+      - build/libs
+  except:
+    - tags
+    - master
+    - dev
+
+deploy-staging:
+  stage: deploy
+  script:
+    - ./gradlew bootJar
+    - rm -rf /home/gitlab-runner/staging/ || true
+    - mkdir /home/gitlab-runner/staging/
+    - cp -r ./build/libs /home/gitlab-runner/staging
+    - cp runner-scripts/staging.sh /home/gitlab-runner/staging.sh
+    - chmod u+x /home/gitlab-runner/staging.sh
+    - echo "" > /home/gitlab-runner/staging/.env
+    - echo "DB_USERNAME=${DB_USERNAME}" >> /home/gitlab-runner/staging/.env
+    - echo "DB_PASSWORD=${DB_PASSWORD}" >> /home/gitlab-runner/staging/.env
+    - echo "MAPQUEST_API_KEY=${MAPQUEST_API_KEY}" >> /home/gitlab-runner/staging/.env
+    - echo "MODERATION_API_KEY=${MODERATION_API_KEY}" >> /home/gitlab-runner/staging/.env
+    - sudo systemctl restart staging-tab
+  artifacts:
+    paths:
+      - build/libs
+  only:
+    - dev
+
+deploy-production:
+  stage: deploy
+  script:
+    - ./gradlew bootJar
+    - rm -rf /home/gitlab-runner/production/ || true
+    - mkdir /home/gitlab-runner/production/
+    - echo "" > /home/gitlab-runner/production/.env
+    - echo "export DB_USERNAME=${DB_USERNAME}" >> /home/gitlab-runner/production/.env
+    - echo "export DB_PASSWORD=${DB_PASSWORD}" >> /home/gitlab-runner/production/.env
+    - echo "export MAPQUEST_API_KEY=${MAPQUEST_API_KEY}" >> /home/gitlab-runner/production/.env
+    - echo "export MODERATION_API_KEY=${MODERATION_API_KEY}" >> /home/gitlab-runner/production/.env
+    - cp -r ./build/libs /home/gitlab-runner/production
+    - cp runner-scripts/production.sh /home/gitlab-runner/production.sh
+    - chmod u+x /home/gitlab-runner/production.sh
+    - sudo systemctl restart production-tab
+  artifacts:
+    paths:
+      - build/libs
+  only:
+    - tags
+
+endToEndTests:
+  stage: e2eTests
+  script:
+    - ./gradlew end2end
+  only:
+    - dev

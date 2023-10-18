@@ -1,0 +1,11 @@
+.legend {
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 0.8rem;
+}
+
+.dateDisplay {
+    font-size: 2rem;
+}

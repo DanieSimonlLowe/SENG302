@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Formation</title>
+
+  <div th:insert="~{fragments/general.html :: general_header}"></div>
+  <link th:href="@{/css/allprofilepageStyles.css}" rel="stylesheet">
+  <link th:href="@{/css/filterStyles.css}" rel="stylesheet">
+  <link th:href="@{/css/searchpageStyles.css}" rel="stylesheet"/>
+  <link th:href="@{/css/formation.css}" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+  <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+  <input type="hidden" id="teamNameStore" th:value="${team.name}"/>
+  <input type="hidden" id="playersImagesStore" th:value="${playersImages}"/>
+
+
+  <form class="formation-create-div" id="formation_form" th:action="@{formations/create}" method="post" style=" height: 100%">
+    <div class="container-fluid" style="align-items: center; height: 100%">
+      <div class="row">
+        <div class="col-lg-4 d-flex flex-column justify-content-between">
+          <h3 class="fw-normal text-center mb-5" style="color: #3C6E71; padding: 3%">Create New Formation</h3>
+          <div class="mb-4 pb-2">
+            <label class="form-label" for="formationNumInput">Enter formation: </label>
+            <input type="text" id="formationNumInput" class="formation-top-text form-control w-100" name="formation" style=" width: 100%; margin-bottom:10px"
+                   th:classappend="${message} ? 'is-invalid'" th:value="${formationInput}"/>
+
+            <label id="invalidFormation" class="invalid-feedback text-center row" th:text="${message}"></label>
+
+          </div>
+            <div class="mb-4 pb-2">
+                <label class="form-label" for="formationImage">Select a sport pitch:</label>
+                <select class="form-select" name="formationImage" id="formationImage" onchange="changeImage(this);" style="width:300px">
+                  <option th:each="image, iter : ${formationImages}" th:value="${image}" th:text="${formationSports[iter.index]}" th:selected="${image == defaultSport}"></option>
+                </select>
+            </div>
+
+          <div class="mb-4 pb-2">
+            <input type="number" hidden="hidden" th:value="${teamId}" name="teamId">
+            <input type="text" hidden="hidden" id="formationSportStore" name="sport" th:value="${defaultSport}">
+
+            <div class="d-flex justify-content-between">
+            <a id="cancel-btn" th:href="@{/teamProfile(id=${teamId})}">
+              <button class="btn btn-danger btn-lg" type="button" style="background-color: #DC3545 !important">Cancel</button>
+              </a>
+            <button type="submit" id="formation_submit" class="btn btn-light btn-lg">Submit</button>
+              </div>
+
+          </div>
+
+
+        </div>
+        <div class="col-lg-8">
+          <div id="formationContainer" class="col" th:style="'background-position: center; background-image:url(images/' + @{${defaultSport}} + '.png); background-size: contain; background-repeat:no-repeat; margin: 0 auto;'">
+            <div id="formationDisplay" class="d-flex formation-display flex-row justify-content-around" style="aspect-ratio: 2 / 1;  margin: 0 auto; border-color: white;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</body>
+
+<script>
+  const formationInput = document.getElementById("formationNumInput");
+  const formationErrorMsg = document.getElementById("invalidFormation");
+  const formationDisplay = document.getElementById("formationDisplay");
+  const displayingImages = [];
+  let oldNums = [];
+
+
+  // Prevent default of submit button if input is invalid
+  document.getElementById("formation_form").addEventListener("submit", function (event) {
+    if(formationInput.classList.contains("is-invalid")) {
+      event.preventDefault();
+    }
+  });
+
+
+  /**
+   * this updates the formation display so that it displays the listed number of users per row.
+   * */
+  function showFormation(nums) {
+    oldNums = nums;
+    const fragment = document.createDocumentFragment();
+
+    let current = 0;
+    if (nums.length > 0) {
+      nums.forEach((num, j) => {
+        const divElement = document.createElement("div");
+        divElement.classList.add("d-flex", "flex-column", "justify-content-evenly");
+        divElement.setAttribute("style", "width:5%;")
+
+        for (let i = 0; i < num; i++) {
+
+          const imgElement = document.createElement("img");
+          imgElement.setAttribute("src", "images/default-img.png");
+          imgElement.setAttribute("style", "max-width: 90px; max-height: 90px;");
+          imgElement.setAttribute("ondragover", "allowDrop(event)");
+          imgElement.setAttribute("ondrop", `drop(${current})(event)`);
+          imgElement.setAttribute("id", `position_${i}_${j}`);
+
+          divElement.appendChild(imgElement);
+          current++;
+        }
+        fragment.appendChild(divElement);
+      });
+    }
+
+    // Clear existing content
+    while (formationDisplay.firstChild) {
+      formationDisplay.removeChild(formationDisplay.firstChild);
+    }
+
+    formationDisplay.appendChild(fragment);
+  }
+
+
+  let oldText = "";
+
+  /**
+   *this is called when ever the formationNumInput is updated.
+   * it checks that the value of the input is valid and if it is then it calls showFormation
+   * else it will revert the inner text to the old valid value.
+   * */
+  function updateFormationText(evt) {
+    const text = evt.currentTarget.value;
+
+    let errorMsg = "";
+
+    if (oldText === text) {
+      return;
+    } else if (text === "") {
+      showFormation([]);
+      return;
+    }
+    const parts = text.split("-");
+    let nums = [];
+    let shouldDisplay = true;
+
+    parts.forEach((str) => {
+      const val = parseInt(str, 10);
+      if (isNaN(val) || isNaN(Number(str))) {
+        if (str !== "") {
+          shouldDisplay = false;
+        }
+      } else {
+
+        // Given the maximum number is 15, check
+        if(val > 15) {
+          // Error
+          shouldDisplay = false;
+          errorMsg = "Each column in a formation can have a maximum of 15 players";
+          // Add the character so that it still displays in the text box
+          oldText = text;
+        } else if(nums.length == 8) {
+          // The maximum number of columns is 8
+          shouldDisplay = false;
+          errorMsg = "A formation can have a maximum of 8 columns of players";
+          oldText = text;
+        } else {
+          // Value is good to add
+          nums.push(val);
+        }
+
+      }
+    })
+
+    if (shouldDisplay) {
+      // Turn off errors
+      if(formationInput.classList.contains("is-invalid")) {
+        formationInput.classList.remove("is-invalid");
+      }
+
+      oldText = text;
+      showFormation(nums);
+      formationErrorMsg.textContent = "";
+
+    } else {
+      evt.currentTarget.value = oldText;
+
+      // Toggle the error on the input
+      if(!formationInput.classList.contains("is-invalid")) {
+        formationInput.classList.add("is-invalid");
+      }
+
+      if(errorMsg.length > 0) {
+        formationErrorMsg.textContent = errorMsg;
+      } else {
+        console.log("Formations can only include ...");
+        formationErrorMsg.textContent = "Formations can only include integers and '-'.";
+      }
+    }
+  }
+
+  formationInput.addEventListener('input', updateFormationText);
+
+  /**
+  * Changes the background image for a formation when the user selects from the dropdown
+  * */
+  function changeImage(imageName) {
+    document.getElementById('formationContainer').style.backgroundImage = "url('images/" + imageName.value + ".png')";
+    document.getElementById('formationSportStore').value = imageName.value;
+  }
+</script>
+
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+</html>

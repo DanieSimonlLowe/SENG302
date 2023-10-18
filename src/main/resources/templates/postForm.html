@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+  <link th:href="@{/css/profilepageStyles.css}" rel="stylesheet" type="text/css"/>
+  <link th:href="@{/css/profilePic.css}" rel="stylesheet" type="text/css"/>
+  <link th:href="@{/css/activityFormStyles.css}" rel="stylesheet"/>
+  <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+
+<!-- input Header nav bar -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+<div class="p-2 bg-light card" style="margin: 2.5% 15% 0 15%">
+  <form th:action="@{${submitPage}}" enctype="multipart/form-data" method="post" id="form" name="addPostForm" class="container">
+
+    <input type="hidden" id="id" th:name="id" th:value="${id}"/>
+
+
+    <div class="tab-content">
+      <!-- Club Details Tab -->
+      <div class="tab-pane fade show active" id="overviewTab" role="tabpanel">
+        <div class="d-flex flex-column mt-5">
+          <div class="d-flex justify-content-center"><h1 th:text="${title}"></h1></div>
+          <div>
+            <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+              <label for="postTitle" class="form-label requiredField">Post Title</label>
+              <input type="text" id="postTitle" class="form-control form-control-lg"
+                     th:name="postTitle" th:value="${postTitle}" data-cy="postTitle" autocomplete="off"
+                     placeholder="Your Amazing Post Title..."
+                     oninvalid="this.setCustomValidity('Please enter an appropriate title.')"
+                     oninput="setCustomValidity('')" th:classappend="${postTitleError} ? is-invalid" autofocus required/>
+              <label class="invalid-feedback" th:text="${postTitleError}" id="postTitleError"></label>
+            </div>
+            <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+              <label for="postDescription" class="form-label requiredField">Post Description</label>
+              <textarea class="form-control" rows="5"
+                        id="postDescription" th:text="${postDescription}" th:name="postDescription"
+                        oninvalid="this.setCustomValidity('Please enter an appropriate description for the post.')"
+                        oninput="setCustomValidity('')" th:classappend="${postDescError} ? is-invalid" required autofocus></textarea>
+              <label class="invalid-feedback" th:text="${postDescError}" id="postDescError"></label>
+            </div>
+
+            <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+              <div class="d-flex">
+                <label for="postAttachment" class="dark-button-md btn-primary">
+                  <span class="material-symbols-outlined">attach_file</span>
+                  Add Attachment
+                </label>
+                <input type="file" id="postAttachment" name="postAttachment" onchange="addAttachmentFile()" hidden>
+              </div>
+              <div class="alert alert-danger" hidden="true" id="errorDiv"> <!--th:if="${error}"-->
+                <div class="p_title" th:text="${error}" id="error" style="text-align: center"></div>
+              </div>
+              <div class="alert alert-danger" hidden="true" id="fileSizeErrorDiv"> <!--th:if="${fileSizeError}"-->
+                <div class="p_title" th:text="${fileSizeError}" id="fileSizeError" style="text-align: center"></div>
+              </div>
+            </div>
+
+            <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+              <div class="d-flex" id="attachmentsContainer">
+                <img class="img-fluid" id="postImgAttachmentSrc">
+                <video class="img-fluid" id="postVideoAttachmentSrc"></video>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- End Club Details Tab -->
+
+    </div>
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-end mt-4 ms-sm-5 me-sm-5 p-3">
+      <div class="navigation-buttons me-3">
+        <button type="submit" id="addPostBtn" class="btn">Add Post</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Javascript -->
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+<script th:src="@{/javascript/profilePic.js}" type="text/javascript" defer></script>
+<!-- Javascript -->
+</body>
+</html>

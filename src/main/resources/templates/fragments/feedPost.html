@@ -1,0 +1,194 @@
+<div th:fragment="feed_post (id, user, owner, ownerId, ownerType, title, message, date, isVideo, isImg, attachmentSrc, attachmentType, flag, flagReason, style, clubId)"
+     class="post">
+
+    <!-- No Image -->
+    <div class="row gx-5 mb-2 d-flex flex-column" th:unless="${isImg or isVideo}">
+        <div class="row" style="height: fit-content;">
+            <div class="post-header position-relative">
+                <h2 class="fw-bold text-center" th:text="${title}"></h2>
+                <div th:if="${!flag}">
+                    <button class="btn position-absolute end-0" id="deletePostButton"
+                            style="background-color: transparent !important" th:if="${isManager}"
+                            th:onclick="'deletePost(' + ${id} + ')'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-trash3"
+                             viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <p class="text-muted text-center fs-6" th:text="${message}"></p>
+        </div>
+
+        <div class="w-100 d-flex justify-content-between align-items-end flex-row mt-auto">
+            <div class="d-flex flex-row gap-2">
+                <div th:replace="~{fragments/profilePicture.html :: profilePictureSmallStyled (imgSrc = ${user.getProfilePicName()}, style = ${style})}"></div>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <p class="fw-bold mb-0 align-self-center"
+                       th:text="${user.getFirstName() + ' ' + user.getLastName()}"></p>
+                    <p th:unless="${ownerType == ownerType.USER}" class="text-muted fst-italic mb-0 align-self-center"
+                       th:text="${owner}"></p>
+                </div>
+            </div>
+
+            <div th:if="${!flag}">
+                <button class="btn" style="background-color: transparent !important;" data-toggled="false"
+                        th:id="'comment_button_' + ${id}" th:onclick="'getComments(' + ${id} + ', ' + ${clubId} + ', true)'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black"
+                         class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div th:if="${flag}"
+             class="border-top border-1 pt-3 w-100 d-flex justify-content-between align-items-end flex-row mt-auto">
+            <span th:text="${'Flagged due to: ' + flagReason}"></span>
+            <div>
+                <a id="deleteFlagPostButton" class="btn post-delete-btn" th:onclick="'deletePost(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ban"
+                         viewBox="0 0 16 16">
+                        <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8ZM2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Z"/>
+                    </svg>
+                    Remove
+                </a>
+                <a id="unflagPostButton" class="btn btn-dark" th:onclick="'unflagPost(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-check-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                    </svg>
+                    Allow
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Featuring an image or a video -->
+    <div class="row gx-5" th:if="${isImg or isVideo}">
+        <div class="col-md-5 mb-4">
+            <div>
+                <div class="bg-image shadow-sm rounded-5" th:if="${isImg}">
+                    <img th:src="@{${attachmentSrc}}" class="img-fluid rounded-5"/>
+                </div>
+                <div th:if="${isVideo}">
+                    <video controls class="w-100 h-auto rounded-5">-->
+                        <source th:src="@{${attachmentSrc}}" th:type="@{${'video/' + attachmentType}}">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 mb-4 d-flex flex-column">
+            <div class="row" style="height: fit-content;">
+                <div class="post-header justify-content-between d-flex">
+                    <h2 class="fw-bold text-center" th:text="${title}"></h2>
+                    <div th:if="${!flag}">
+                        <button class="btn" id="deletePostButton" style="background-color: transparent !important"
+                                th:if="${isManager}" th:onclick="'deletePost(' + ${id} + ')'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black"
+                                 class="bi bi-trash3" viewBox="0 0 16 16">
+                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-muted text-start fs-6" th:text="${message}" style="word-break: break-all"></p>
+            </div>
+
+            <div class="w-100 d-flex justify-content-between align-items-between flex-row mt-auto">
+                <div>
+                    <div class="d-flex flex-row gap-2">
+                        <div th:replace="~{fragments/profilePicture.html :: profilePictureSmall (imgSrc = ${user.getProfilePicName()}, style = ${style})}"></div>
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <p class="fw-bold mb-0 align-self-center"
+                               th:text="${user.getFirstName() + ' ' + user.getLastName()}"></p>
+                            <p th:unless="${ownerType == ownerType.USER}"
+                               class="text-muted fst-italic mb-0 align-self-center" th:text="${owner}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${!flag}" class="ms-auto">
+                    <button class="btn" style="background-color: transparent !important;" data-toggled="false"
+                            th:id="'comment_button_' + ${id}" th:onclick="'getComments(' + ${id} + ', ' + ${clubId} + ', true)'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black"
+                             class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div th:if="${flag}"
+             class="border-top border-1 pt-3 w-100 d-flex justify-content-between align-items-end flex-row mt-auto">
+            <span th:text="${'Flagged due to: ' + flagReason}"></span>
+            <div>
+                <a id="deleteFlagPostButton" class="btn post-delete-btn" th:onclick="'deletePost(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ban"
+                         viewBox="0 0 16 16">
+                        <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8ZM2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Z"/>
+                    </svg>
+                    Remove
+                </a>
+                <a id="unflagPostButton" class="btn btn-dark" th:onclick="'unflagPost(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-check-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                    </svg>
+                    Allow
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="post-comments border-top border-1 pt-3" th:id="'comments_' + ${id}"></div>
+</div>
+
+
+<div th:fragment="comment_flagged (id, image, owner, message, date, flag, flagReason)" class="post">
+    <div class="row gx-5 mb-2 d-flex flex-column">
+        <div class="row" style="height: fit-content;">
+            <p class="text-center fs-6" th:text="${message}"></p>
+        </div>
+
+        <div class="w-100 d-flex justify-content-between align-items-between flex-row mt-auto">
+            <div>
+                <div class="d-flex flex-row gap-2">
+                    <div th:replace="~{fragments/profilePicture.html :: profilePictureSmall (imgSrc = ${image})}"></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <p class="fw-bold mb-0 align-self-center"
+                           th:text="${owner}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${flag}"
+             class="border-top border-1 pt-3 w-100 d-flex justify-content-between align-items-end flex-row mt-auto">
+            <span th:text="${'Flagged due to: ' + flagReason}"></span>
+            <div>
+                <a id="deleteFlagCommentButton" class="btn post-delete-btn" th:onclick="'deleteComment(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ban"
+                         viewBox="0 0 16 16">
+                        <path d="M15 8a6.973 6.973 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8ZM2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Z"/>
+                    </svg>
+                    Remove
+                </a>
+                <a id="unflagCommentButton" class="btn btn-dark" th:onclick="'unflagComment(' + ${id} + ')'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-check-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                    </svg>
+                    Allow
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

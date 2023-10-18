@@ -1,0 +1,105 @@
+.homepage-body {
+    margin-right: 25%;
+    margin-left: 25%;
+    padding: 10px;
+}
+
+.centered-text {
+    text-align: center;
+    margin: 40px;
+}
+
+h3 {
+    margin-top: 50px;
+}
+
+.top-img {
+    align-self: center;
+    position: relative;
+    top: 20px;
+    width: 75%;
+    margin: auto;
+}
+
+.card {
+    margin-top: 10%;
+}
+
+.card-body {
+    margin-top: 5%;
+}
+
+.second-container {
+    margin-top: 20px;
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    padding-bottom:20px;
+
+}
+
+.second-container img{
+    flex-basis: 60%;
+    overflow: hidden;
+    height: 60vh;
+}
+
+p {
+    text-align: center;
+    font-size: 13px;
+    color: #2f2f2f;
+}
+
+h4 {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.lists > * + * {
+    margin-top: 1rem;
+}
+
+.list-header {
+    font-weight: bold;
+}
+
+.backToSearch {
+    color: #2f2f2f;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.image-selection {
+    transition: .5s ease;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+#profilePicActivator:hover {
+    cursor: pointer;
+}
+
+.opaque-image {
+    transition: .5s ease;
+}
+
+.image-hover-container:hover .opaque-image {
+    opacity: 0.3;
+}
+
+.image-hover-container:hover .image-selection {
+    opacity: 1;
+}
+
+tr:hover {
+    cursor: pointer;
+    opacity: 80%;
+}

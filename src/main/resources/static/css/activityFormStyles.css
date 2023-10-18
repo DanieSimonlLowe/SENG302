@@ -1,0 +1,13 @@
+.navigation-buttons button {
+    background-color: #41a7e1 ;
+    color: white;
+}
+
+.navigation-buttons button:hover {
+    opacity: 50%;
+    border-color: gray;
+}
+
+h1 {
+    color: #317ce3  ;
+}

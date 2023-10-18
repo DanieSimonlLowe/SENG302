@@ -1,0 +1,26 @@
+button {
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    background-color: inherit;
+}
+
+button:hover {
+    opacity: 50%;
+}
+
+.active > svg > .svgIcon{
+    fill: white;
+}
+
+.active > svg > .svgBorder{
+    fill: #49b2e8 ;
+}
+
+.highlight > svg > .svgIcon{
+    fill: white;
+}
+
+.highlight > svg > .svgBorder{
+    fill: #49b2e8 ;
+}

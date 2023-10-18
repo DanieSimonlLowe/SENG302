@@ -1,0 +1,27 @@
+.formation-display {
+    border-style: solid;
+    border-width: 1px;
+
+    width: 100%;
+
+}
+
+.formation-create-div {
+    padding: 0px 20px;
+}
+
+.draggable_player_image {
+    padding: 10px;
+}
+
+
+.available_players_div {
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 4px;
+    overflow-y: auto;
+}
+
+.formation-top-text {
+    font-size: 20px;
+}

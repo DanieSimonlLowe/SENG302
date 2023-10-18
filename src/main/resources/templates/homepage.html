@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head>
+        <link th:href="@{/css/homepageStyles.css}" rel="stylesheet" type="text/css"/>
+        <div th:insert="~{fragments/general.html :: general_header}"></div>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <!-- Navbar fragment -->
+        <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+        <section class="h-100">
+            <div class="homepage-body">
+                <div class="top-image-container">
+                    <img th:src="@{/images/ball-rugby-women-rugby-field.jpg}" alt="Women's rugby team" class="img-fluid">
+                    <div class="position-absolute bottom-0 start-0 text-light" style="padding: 1%">
+                        <p>Join a team</p>
+                        <p>Review game stats</p>
+                        <p>Destroy the competition</p>
+                        <a th:href="@{/#sign-up}" class="light-button-md">Learn more</a>
+                    </div>
+                </div>
+
+                <div class="second-image-container">
+                    <img th:src="@{/images/homepage_female_running.png}" alt="Marathon runner" class="img-fluid">
+                    <div class="right-text">
+                        <div class="tab-title">
+                            <p>Become your best self</p>
+                        </div>
+                        <div style="font-size: 20px;">
+                            <p>Track and compare your runs across different terrain.</p>
+                            <p>Tackle new challenges and obstacles and improve your times all within Team Analytics Builder.</p>
+                        </div>
+
+                        <div class="sign-up-container">
+                            <!-- Redirects to sign-up page -->
+                            <p>Not already a member?</p>
+                            <a id="sign-up" th:href="@{/register}" class="dark-button-md">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <div th:insert="~{fragments/general.html :: general_footer}"></div>
+    </body>
+</html>

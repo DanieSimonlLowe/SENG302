@@ -1,0 +1,29 @@
+<div class="pagination">
+    <nav aria-label="Pagination" th:if="${entries.totalPages > 0}">
+        <span th:unless="${page == 1}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=1)}"><<</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence( 1, entries.totalPages, 1)}">
+            <span th:if="${page == i}">
+                <a class="pagination-drk-btn" th:href="@{${pageName}(page=${i})}" th:text="${i}"></a>
+            </span>
+            <span th:unless="${page == i}">
+                <a class="pagination-lgt-btn" th:href="@{${pageName}(page=${i})}" th:text="${i}"></a>
+            </span>
+        </span>
+        <span th:unless="${page == entries.getTotalPages}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=${entries.getTotalPages})}">>></a>
+        </span>
+    </nav>
+
+    <!-- user pagination. -->
+    <nav aria-label="Pagination" th:if="${entries.totalPages > 0}">
+        <div th:unless="${page == 1}">
+            <a class="pagination-drk-btn pagination-left-arrow" th:href="@{${pageName}(page=1)}"><</a>
+        </div>
+
+        <div th:unless="${page == entries.getTotalPages}" class="pagination-right-arrow">
+            <a class="pagination-drk-btn pagination-right-arrow" th:href="@{${pageName}(page=${entries.getTotalPages})}">></a>
+        </div>
+    </nav>
+</div>

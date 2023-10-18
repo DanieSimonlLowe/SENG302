@@ -1,0 +1,123 @@
+
+<div th:fragment="navbar">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link th:href="@{/css/navbar.css}" rel="stylesheet">
+
+
+  <!-- Navbar -->
+  <nav  class="navbar navbar-expand-lg navbar-right navbar-light bg-light static-top">
+    <div class="container-fluid">
+      <!-- Navbar brand -->
+      <a class="navbar-brand ms-auto mt-2 mt-lg-0" th:href="@{/}">
+        <img th:src="@{/images/PRISM_LOGO.png}" alt="PRISM" style=" max-width: 10vw ">
+      </a>
+      <!-- Toggle button -->
+      <button
+              class="navbar-toggler ms-auto"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+          <li class = "nav-item ms-auto mx-1 my-1" th:unless="${loggedIn}">
+            <a th:href="@{/login}" id="login"><button class="dark-button-md btn-primary">
+              <span class="material-symbols-outlined nav-image">login</span><br/>
+              Log In
+            </button></a>
+          </li>
+
+          <li class="nav-item dropdown ms-auto mx-1 my-1" th:if="${loggedIn}">
+            <button class="dropdown-toggle dark-button-md btn-primary" type="button" id="teamDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" style="height: 100%">
+              <span class="material-symbols-outlined nav-image">group</span><br/>
+              Teams
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="teamDropdownMenu" style="z-index:1030">
+              <a class="dropdown-item" th:href="@{/form}" id="createTeam"><span class="material-symbols-outlined">add_circle</span>Create Team</a>
+              <a class="dropdown-item" th:href="@{/myTeams}" id="myTeams"><span class="material-symbols-outlined">account_circle</span>My Teams</a>
+              <a class="dropdown-item" th:href="@{/joinTeam}" id="joinTeam"><span class="material-symbols-outlined">join</span>Join Team</a>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown ms-auto mx-1 my-1" th:if="${loggedIn}">
+            <button class="dropdown-toggle dark-button-md btn-primary" type="button" id="clubsDropDownMenu" data-bs-toggle="dropdown" aria-expanded="false" style="height: 100%">
+              <span class="material-symbols-outlined nav-image">groups</span><br/>
+              Club
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="teamDropdownMenu" style="z-index:1030;">
+              <a class="dropdown-item" th:href="@{/clubForm}" id="clubForm"><span class="material-symbols-outlined">add_circle</span>Create Club</a>
+              <a class="dropdown-item" th:href="@{/myClubs}" id="myClubs"><span class="material-symbols-outlined">account_circle</span>My Clubs</a>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown ms-auto mx-1 my-1" th:if="${loggedIn}">
+            <button class="dropdown-toggle dark-button-md btn-primary" type="button" id="activitiesDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false" style="height: 100%">
+              <span class="material-symbols-outlined nav-image">event</span><br/>
+              Activities
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="teamDropdownMenu" style="z-index:1030;">
+              <a class="dropdown-item" th:href="@{/activityForm}" id="createActivity"> <span class="material-symbols-outlined">add_circle</span> Create Activity</a>
+              <a class="dropdown-item" th:href="@{/viewActivities}" id="myActivities"> <span class="material-symbols-outlined">calendar_today</span> My Activities</a>
+            </ul>
+          </li>
+
+
+          <li class = "nav-item ms-auto mx-1 my-1">
+            <a th:href="@{/allProfiles}" id="searchUsers"><button class="dark-button-md btn-primary">
+              <span class="material-symbols-outlined nav-image">Person_Search</span><br/>
+              Search Users</button>
+            </a>
+          </li>
+
+          <li class = "nav-item ms-auto mx-1 my-1">
+            <a th:href="@{/allTeams}" id="searchTeams"><button class="dark-button-md btn-primary">
+              <span class="material-symbols-outlined nav-image">groups search</span><br/>
+              Search Teams/Clubs
+            </button></a>
+          </li>
+
+          <li class = "nav-item ms-auto mx-1 my-1" th:if="${loggedIn}">
+            <a th:href="@{/profile}" id="myProfile">
+              <button class="dark-button-md btn-primary" style="height: 100%">
+                <img th:src="@{${userProfileImage}}" class="nav-image img-fluid rounded-circle"/><br/>
+                My Profile
+              </button>
+            </a>
+          </li>
+
+          <li class="nav-item dropdown ms-auto mx-1 my-1" id="bellSelector" th:if="${loggedIn}">
+            <input hidden th:value="${userId}" id="AlertUserId">
+
+            <button onclick="openAlerts()" class="dropdown-toggle dark-button-md btn-primary" type="button" id="notificationsDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="material-symbols-outlined nav-image">notifications</span><span class="badge bg-info rounded-pill" id="numAlerts" name="numAlerts"></span><br/>
+              Alerts
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end notifications" id="notificationDropdownArea" aria-labelledby="teamDropdownMenu" style="z-index:1030; min-width: 310px; max-height: 280px; overflow-y: auto; overflow-x:hidden;">
+              <h6 class="dropdown-header" style="text-align: center;">Notifications</h6>
+              <ul id="notifs" style="padding: 0">
+              </ul>
+            </ul>
+          </li>
+
+          <li class = "nav-item ms-auto mx-1 my-1" th:if="${loggedIn}">
+
+            <a th:href="@{/logout}" id="logOut"><button class="dark-button-md btn-primary">
+              <span class="material-symbols-outlined nav-image">logout</span><br/>
+              Log Out
+            </button></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <script th:if="${loggedIn}" type="text/javascript" th:src="@{/javascript/alerts.js}" defer></script>
+</div>

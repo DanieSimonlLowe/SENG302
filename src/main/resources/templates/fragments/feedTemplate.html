@@ -1,0 +1,34 @@
+<div class="w-100" th:fragment="feed_template (posts, clubId)">
+    <script th:src="@{/javascript/feed.js}" defer></script>
+    <input hidden id="feed-is-manager" th:value="${isManager}"/>
+    <div class="container">
+        <div class="row">
+            <div class="social-feed w-100">
+                <th:block th:if="${posts.size > 0}">
+                    <div th:each="post : ${posts}">
+                        <div th:replace="~{fragments/feedPost.html :: feed_post(id = ${post.getId()}, user = ${post.getAuthor()}, ownerId = ${post.getOwnerId()}, ownerType = ${post.getOwnerType()}, owner = ${post.getOwnerName()}, title=${post.getTitle()}, message = ${post.getMessage()}, date = ${post.getDateTimeString()}, isVideo = ${post.isVideo()},, isImg = ${post.isImg()}, attachmentSrc = ${post.getAttachmentName()}, attachmentType = ${post.getAttachmentType()}, flag = ${post.getFlagged()}, flagReason = ${post.getFlaggedReason()}, style = ${post.getStyle()}, clubId = ${clubId} )}"></div>
+                    </div>
+                </th:block>
+                <th:block th:unless="${posts.size > 0}">
+                    <div style="text-align: center">
+                        <p class="lead">There are no posts to show!</p>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="w-100" th:fragment="comment_flagged (comments, usersFlagged)">
+    <script th:src="@{/javascript/feed.js}" defer></script>
+    <div class="container">
+        <div class="row">
+            <div class="social-feed w-100">
+                <div th:each="comment, iter : ${comments}">
+                    <div th:replace="~{fragments/feedPost.html :: comment_flagged(id = ${comment.getId()},image = 'images/default-img.png', owner = ${usersFlagged[iter.index]}, message = ${comment.getMessage()}, date = ${comment.getDateTime()}, flag = ${comment.getFlagged()}, flagReason = ${comment.getFlaggedReason()} )}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

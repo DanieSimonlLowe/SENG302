@@ -1,0 +1,33 @@
+.container{
+    margin-top: 1rem;
+}
+
+.team-profile-content > * + * {
+    margin-top: 1rem;
+}
+
+.lists > * + * {
+    margin-top: 1rem;
+}
+
+.list-header {
+    font-weight: bold;
+}
+
+.team-info > * {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-buttons {
+    margin-top: 1rem;
+}
+
+.btn {
+    background-color: #49b2e8  !important;
+    color: white !important;
+}
+
+.error-label {
+    color: red;
+}

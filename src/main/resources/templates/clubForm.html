@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/registrationStyles.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/formation.css}" rel="stylesheet"/>
+    <link th:href="@{/css/lineupStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/profilePic.css}" rel="stylesheet"/>
+    <link th:href="@{/css/stepperStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/activityFormStyles.css}" rel="stylesheet"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+
+<!-- input Header nav bar -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+<div class="p-2 bg-light card" style="margin: 2.5% 15% 0 15%">
+    <form th:action="@{clubForm}" method="post" enctype="multipart/form-data"  id="form" name="clubForm">
+        <input type="hidden" id="clubId" th:name="clubId" th:value="${clubId}"/>
+        <!-- Navigation Stepper -->
+        <div th:insert="~{fragments/clubStepper.html}"></div>
+        <!-- Form Body -->
+        <div class="tab-content">
+            <!-- Club Details Tab -->
+            <div class="tab-pane fade show active" id="overviewTab" role="tabpanel">
+                <div class="d-flex flex-column mt-5">
+                    <div class="d-flex justify-content-center">
+                        <h1>Club Details</h1>
+
+                    </div>
+                    <div>
+                        <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                            <div th:replace="~{fragments/profilePicture.html :: profilePictureEditable}"></div>
+                        </div>
+                        <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                            <label for="clubName" class="form-label h2 requiredField">Club Name</label>
+                            <input type="text" id="clubName" class="form-control form-control-lg"
+                                   th:name="clubName" th:value="${clubName}" data-cy="clubName" autocomplete="off"
+                                   placeholder="Your amazing club name..."
+                                   oninvalid="this.setCustomValidity('Please enter an appropriate Name.')"
+                                   oninput="setCustomValidity('')" th:classappend="${invalidClubName} ? is-invalid" autofocus required/>
+                            <label class="invalid-feedback" th:text="${invalidClubName}" id="clubNameError"></label>
+                        </div>
+
+                        <div class="d-flex flex-column flex-xl-row mt-4 ms-sm-5 me-sm-5 p-3">
+                            <div class="flex-fill mb-4 mb-xl-0 me-xl-3">
+                                <div class="d-flex flex-column mb-2">
+                                    <label class="form-label h2 requiredField mb-0">Teams</label>
+                                    <label class="form-text text-muted mt-0">Only teams with the same sport can be selected</label>
+                                </div>
+
+
+                                <div class="scrollable-checkbox-list" style="max-height: 12rem; overflow-y: auto;" id="checkboxeslist">
+                                    <div th:each="team : ${dropdownTeams}">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input clubTeam" th:id="${'clubTeam' + team.getId()}"
+                                                   th:name="clubTeam" th:value="${team.getId()}"
+                                                   th:checked="${#lists.isEmpty(selectedTeams) ? false : #lists.contains(selectedTeams, team)}" th:onclick="getTeamsBySport(/*[[${team.getId()}]]*/)">
+                                            <label class="form-check-label" th:for="${'clubTeam' + team.getId()}" th:text="${team.getName()}"></label>
+                                        </div>
+                                    </div>
+
+                                    <p class="small error-label"></p>
+                                </div>
+                                <label style="color: red;" th:text="${teamClubError}" id="teamClubError"></label>
+<!--                                <label class="invalid-feedback" id="clubTeamError"></label>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Club Details Tab -->
+            <!-- Start Location Tab -->
+            <div class="tab-pane fade" id="locationTab" role="tabpanel">
+                <div class="d-flex flex-column mt-5">
+                    <div class="d-flex justify-content-center">
+                        <h1>Activity Location</h1>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <label for="form-address1" class="form-label requiredField">Address 1</label>
+                        <input type="text" id="form-address1" list="location-list" class="form-control form-control-lg"
+                               th:name="address1" th:value="${address1}" data-cy="address1" autocomplete="off"
+                               placeholder="Start typing the address..."
+                               oninput="onInput()" th:classappend="${invalidAddress1} ? is-invalid" autofocus required/>
+                        <label class="invalid-feedback" th:text="${invalidAddress1}" id="address1Error"></label>
+                        <datalist id="location-list"></datalist>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <label for="form-address2" class="form-label">Address 2</label>
+                        <input type="text" id="form-address2" class="form-control form-control-lg"
+                               th:name="address2" th:value="${address2}" data-cy="address2"
+                               th:classappend="${invalidAddress2} ? is-invalid" autofocus/>
+                        <label class="invalid-feedback" th:text="${invalidAddress2}" id="address2Error"></label>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 mb-md-0">
+                                <label class="form-label requiredField" for="form-postcode">Postcode</label>
+                                <input type="text" id="form-postcode" class="form-control form-control-lg"
+                                       th:name="postcode" th:value="${postcode}" data-cy="postcode"
+                                       th:classappend="${invalidPostcode} ? is-invalid" autofocus required/>
+                                <label class="invalid-feedback" th:text="${invalidPostcode}" id="postcodeError"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label" for="form-suburb">Suburb</label>
+                                <input type="text" id="form-suburb" class="form-control form-control-lg"
+                                       th:name="suburb" th:value="${suburb}" data-cy="suburb"
+                                       th:classappend="${invalidSuburb} ? is-invalid"/>
+                                <label class="invalid-feedback" th:text="${invalidSuburb}" id="suburbError"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="form-outline">
+                            <label for="form-city" class="form-label requiredField">City</label>
+                            <input type="text" id="form-city" class="form-control form-control-lg"
+                                   th:name="city" th:value="${city}" data-cy="city"
+                                   th:classappend="${invalidCity} ? is-invalid" autofocus required/>
+                            <label class="invalid-feedback" th:text="${invalidCity}" id="cityError"></label>
+                        </div>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="form-outline">
+                            <label for="form-country" class="form-label requiredField">Country</label>
+                            <input type="text" id="form-country" class="form-control form-control-lg"
+                                   th:name="country" th:value="${country}" data-cy="country"
+                                   th:classappend="${invalidCountry} ? is-invalid" autofocus required/>
+                            <label class="invalid-feedback" th:text="${invalidCountry}" id="countryError"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Location Tab -->
+        </div>
+        <!-- Navigation Buttons -->
+        <div class="d-flex justify-content-between mt-4 ms-sm-5 me-sm-5 p-3">
+            <a class="btn btn-danger btn-lg" onclick="history.back()" id="cancel-btn">Cancel</a>
+            <div class="navigation-buttons me-3">
+                <button type="button" id="prevButton" class="btn">Previous</button>
+                <button type="button" id="nextButton" class="btn">Next</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+<!-- Javascript -->
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+<script th:src="@{/javascript/locationAPI.js}" type="text/javascript" defer></script>
+<script type="text/javascript" th:src="@{/javascript/clubValidation.js}" defer></script>
+<script th:src="@{/javascript/profilePic.js}" type="text/javascript" defer></script>
+<script th:src="@{/javascript/clubTeamsBySport.js}" defer></script>
+<!-- Javascript -->
+
+</body>
+</html>

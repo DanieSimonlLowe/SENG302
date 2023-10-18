@@ -1,0 +1,80 @@
+.homepage-body {
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 5px;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.top-image-container {
+    position: relative;
+    margin-top: 10px;
+    /*height: 40vh;*/
+    max-height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.top-image-container img {
+    flex-shrink: 0;
+    min-width: 100%;
+    filter: brightness(60%);
+}
+
+.top-image-container .bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    padding: -20px;
+}
+
+.second-image-container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.second-image-container img{
+    flex-basis: 60%;
+    overflow: hidden;
+    height: 60vh;
+}
+
+.second-image-container .right-text{
+    vertical-align: top;
+    font-size: 22px;
+    padding-left: 40px;
+    padding-bottom: 20px;
+}
+
+.second-image-container .right-text .tab-title {
+    display: inline;
+    vertical-align: text-top;
+    font-size: 50px;
+    text-align: center;
+}
+
+.second-image-container .sign-up-container {
+    text-align: center;
+    font-size: 18px;
+    color: #49b2e8 ;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media screen and (max-width: 1000px) {
+    .second-image-container img{
+        display: none;
+    }
+    .second-image-container .right-text{
+        padding-left: 0;
+    }
+
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/registrationStyles.css}" rel="stylesheet" type="text/css" />
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+    <!-- input header nav bar -->
+    <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+    <!-- form for team creation -->
+    <div>
+        <section class="h-100">
+            <form method="post" th:action="@{form}">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12">
+                            <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Team Details</h3>
+                                                <!-- Left hand side of create team -->
+                                                <form class="mx-1 mx-md-4">
+                                                    <div class="row">
+                                                        <div class="mb-4 pb-2">
+                                                            <div class="form-outline">
+                                                                <input type="hidden" id="id" th:name="id" th:value="${displayId}"/>
+                                                                <label class="form-label requiredField" for="teamName">Team Name</label>
+                                                                <input id="teamName" class="form-control form-control-lg" type="text"
+                                                                       th:name="name" th:value="${displayName}" data-cy="name" th:classappend="${invalidTeam} ? is-invalid" autofocus/>
+                                                                <label class="invalid-feedback" th:text="${invalidTeam}"></label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="sport">Sport</label>
+                                                            <input id="sport" class="form-control form-control-lg" type="text"
+                                                                   th:name="sport" th:value="${displaySport}" data-cy="sport" th:classappend="${invalidSport} ? is-invalid"/>
+                                                            <label class="invalid-feedback" th:text="${invalidSport}"></label>
+                                                            <div class="cut cut-short"></div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- Left hand side of create team end -->
+                                        <!-- Right hand side of create team -->
+
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Team Location</h3>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address1" class="form-label">Address 1</label>
+                                                        <input type="text" id="form-address1" list="location-list" class="form-control form-control-lg"
+                                                               th:name="address1" th:value="${address1}" data-cy="address1" autocomplete="off"
+                                                               placeholder="Start typing your address..." oninput="onInput()" th:classappend="${invalidAddress1} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidAddress1}"></label>
+                                                        <datalist id="location-list"></datalist>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address2" class="form-label">Address 2</label>
+                                                        <input type="text" id="form-address2" class="form-control form-control-lg"
+                                                               th:name="address2" th:value="${address2}" data-cy="address2" autofocus
+                                                               th:classappend="${invalidAddress2} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidAddress2}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-5 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-postcode">Postcode</label>
+                                                            <input type="text" id="form-postcode" class="form-control form-control-lg"
+                                                                   th:name="postcode" th:value="*{postcode}" data-cy="postcode" autofocus
+                                                                   th:classappend="${invalidPostcode} ? is-invalid"/>
+                                                            <label class="invalid-feedback" th:text="${invalidPostcode}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-7 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-suburb">Suburb</label>
+                                                            <input type="text" id="form-suburb" class="form-control form-control-lg"
+                                                                   th:name="suburb" th:value="${suburb}" data-cy="postcode" autofocus
+                                                                   th:classappend="${invalidSuburb} ? is-invalid"/>
+                                                            <label class="invalid-feedback" th:text="${invalidSuburb}"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-city" class="form-label requiredField">City</label>
+                                                        <input type="text" id="form-city" class="form-control form-control-lg"
+                                                               th:name="city" th:value="${city}" data-cy="city" required autofocus
+                                                               th:classappend="${invalidCity} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidCity}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-country" class="form-label requiredField">Country</label>
+                                                        <input type="text" id="form-country" class="form-control form-control-lg"
+                                                               th:name="country" th:value="${country}" data-cy="country" required autofocus
+                                                               th:classappend="${invalidCountry} ? is-invalid"/>
+                                                        <label class="invalid-feedback" th:text="${invalidCountry}"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Right hand side of create team end -->
+                                        <!-- Bottom of create team form -->
+                                        <div class="row justify-content-between">
+                                            <div class="col-4">
+                                                <div class="p-5">
+                                                    <td>
+                                                    <span th:if="${displayId}">
+                                                        <a th:href="@{/teamProfile(id=${displayId})}" id="cancel-btn">
+                                                            <button type="button" class="btn btn-danger btn-lg" >Cancel</button>
+                                                        </a>
+                                                    </span>
+                                                    <span th:unless="${displayId}">
+                                                        <a th:href="@{/}" id="cancel-btn">
+                                                            <button type="button" class="btn btn-danger btn-lg" >Cancel</button>
+                                                        </a>
+                                                    </span>
+                                                    </td>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-5">
+                                                <div class="p-5" style="text-align: right">
+                                                    <button type="submit" class="btn btn-success btn-lg" id="submit" autofocus>Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Bottom of create team form ends -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+        <!-- Javascript -->
+        <div th:insert="~{fragments/general.html :: general_footer}"></div>
+        <script th:src="@{/javascript/locationAPI.js}" type="text/javascript" defer></script>
+
+    </body>
+</html>

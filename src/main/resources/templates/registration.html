@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head>
+        <link th:href="@{/css/registrationStyles.css}" rel="stylesheet" type="text/css" />
+        <div th:insert="~{fragments/general.html :: general_header}"></div>
+
+    </head>
+
+    <body>
+
+        <!-- Navbar fragment -->
+        <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+        <section class="h-100">
+            <form method="post" th:action="@{register}">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-12">
+                            <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Your Details</h3>
+                                                <!-- Left hand side of registration -->
+
+                                                <form class="mx-1 mx-md-4">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6 mb-4 pb-2">
+                                                            <div class="form-outline">
+                                                                <label class="form-label requiredField" for="firstName">First Name</label>
+                                                                <input type="text" id="firstName" th:name="firstName" th:value="${firstName}"
+                                                                       class="form-control form-control-lg"
+                                                                       data-cy="firstName" th:classappend="${invalidFName} ? is-invalid " required autofocus>
+                                                                <label class="invalid-feedback" id="invalidFName" th:text="${invalidFName}"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-4 pb-2">
+                                                            <div class="form-outline">
+                                                                <label class="form-label requiredField" for="lastName">Last Name</label>
+                                                                <input type="text" id="lastName" th:name="lastName" th:value="${lastName}"
+                                                                       class="form-control form-control-lg" th:classappend="${invalidLName} ? is-invalid" required>
+                                                                <label class="invalid-feedback" id="invalidLName" th:text="${invalidLName}"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="email">Email</label>
+                                                            <input type="email" id="email" class="form-control form-control-lg"
+                                                                th:name="email" th:value="${email}" data-cy="email" th:classappend="${invalidEmail} ? is-invalid" required>
+                                                            <label class="error-label" id="invalidEmail" th:text="${invalidEmail}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="DOB">Date of Birth</label>
+                                                            <input type="date" id="DOB" class="form-control form-control-lg"
+                                                               th:name="DOB" th:value="${DOB}" data-cy="DOB"
+                                                               placeholder="DD/MM/YYYY" th:classappend="${invalidDOB} ? is-invalid" required>
+                                                            <label class="invalid-feedback" id="invalidDOB" th:text="${invalidDOB}"></label>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="password">Password</label>
+                                                            <input type="password" id="password" class="form-control form-control-lg"
+                                                               th:name="password" th:value="${password}" data-cy="password"
+                                                               spellcheck="false" autocorrect="false" autocapitalize="false" th:classappend="${invalidPassword} ? is-invalid" required>
+                                                            <label class="invalid-feedback" id="invalidPassword" th:text="${invalidPassword}"></label>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4 pb-2">
+                                                        <div class="form-outline">
+                                                            <label class="form-label requiredField" for="confirmPassword">Confirm Password</label>
+                                                            <input type="password" id="confirmPassword" class="form-control form-control-lg"
+                                                                   th:name="confirmPassword" th:value="*{confirmPassword}"
+                                                                   th:classappend="${invalidPassword} ? is-invalid" required>
+                                                            <label class="invalid-feedback" th:text="${invalidPassword}"></label>
+                                                            <small id="confirmPasswordHelp" class="text-muted form-text">Confirm your password.</small>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- Left hand side of registration end -->
+                                        <!-- Right hand side of registration -->
+
+                                        <div class="col-lg-6">
+                                            <div class="p-5">
+                                                <h3 class="fw-normal text-center mb-5" style="color: #3C6E71;">Contact Details</h3>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address1" class="form-label">Address 1</label>
+                                                        <input type="text" id="form-address1" list="location-list" class="form-control form-control-lg"
+                                                               th:name="address1" th:value="${address1}" data-cy="address1" autocomplete="off"
+                                                               placeholder="Start typing your address..." oninput="onInput()" th:classappend="${invalidAddress1} ? is-invalid"/>
+                                                        <datalist id="location-list"></datalist>
+                                                        <label class="invalid-feedback" id="invalidLocation" th:text="${invalidAddress1}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-address1" class="form-label">Address 2</label>
+                                                        <input type="text" id="form-address2" class="form-control form-control-lg"
+                                                               th:name="address2" th:value="${address2}" data-cy="address2"
+                                                               th:classappend="${invalidAddress2} ? is-invalid"/>
+                                                        <label class="invalid-feedback" id="invalidAddress2" th:text="${invalidAddress2}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-5 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-postcode">Postcode</label>
+                                                            <input type="text" id="form-postcode" class="form-control form-control-lg"
+                                                                autofocus th:name="postcode" th:value="${postcode}" data-cy="postcode"
+                                                                   th:classappend="${invalidPostcode} ? is-invalid"/>
+                                                            <label class="invalid-feedback" id="invalidPostcode" th:text="${invalidPostcode}"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-7 mb-4 pb-2">
+                                                        <div class="form-outline form-white">
+                                                            <label class="form-label" for="form-suburb">Suburb</label>
+                                                            <input type="text" id="form-suburb" class="form-control form-control-lg"
+                                                                autofocus th:name="suburb" th:value="${suburb}" data-cy="postcode"
+                                                                th:classappend="${invalidSuburb} ? is-invalid"/>
+                                                            <label class="invalid-feedback" id="invalidSuburb" th:text="${invalidSuburb}"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-city" class="form-label requiredField">City</label>
+                                                        <input type="text" id="form-city" class="form-control form-control-lg"
+                                                               th:name="city" th:value="${city}" required
+                                                               th:classappend="${invalidCity} ? is-invalid"/>
+                                                        <label class="invalid-feedback" id="invalidCity" th:text="${invalidCity}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4 pb-2">
+                                                    <div class="form-outline">
+                                                        <label for="form-country" class="form-label requiredField">Country</label>
+                                                        <input type="text" id="form-country" class="form-control form-control-lg"
+                                                               th:name="country" th:value="${country}" required
+                                                               th:classappend="${invalidCountry} ? is-invalid"/>
+                                                        <label class="invalid-feedback" id="invalidCountry" th:text="${invalidCountry}"></label>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                        <!-- Right hand side of registration end -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="p-5">
+                                                <a id="cancel-btn" class="btn btn-light btn-lg" th:href="@{/}" data-mdb-ripple-color="dark">Cancel</a>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="p-5" style="text-align: right">
+                                                <button id="register-button" type="submit" class="btn btn-light btn-lg"
+                                                        data-mdb-ripple-color="dark">Register</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+
+
+        <!-- Javascript -->
+        <div th:insert="~{fragments/general.html :: general_footer}"></div>
+        <script th:src="@{/javascript/locationAPI.js}" type="text/javascript" defer></script>
+    </body>
+</html>

@@ -1,0 +1,146 @@
+<div th:fragment="calendar (id, events, onClick, legandName, legandColor)">
+    <script th:src="@{/webjars/toast-ui__calendar/2.1.3/dist/toastui-calendar.min.js}"></script>
+    <link  th:href="@{/webjars/toast-ui__calendar/2.1.3/dist/toastui-calendar.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/calendar.css}" rel="stylesheet" type="text/css"/>
+
+    <div class="container" th:style="'width: 90%;'">
+        <div class="row">
+
+            <div class="d-flex justify-content-around">
+                <button class="dark-button-md" onclick="last()"><</button>
+                <span class="dateDisplay" th:id="${id} + 'date'"></span>
+                <button th:id="${id} + 'NextBtn'" class="dark-button-md" onclick="next()">></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <div class="d-flex flex-row" style="width: 100%">
+                    <div th:id="${id}" th:style="'width: 100%; aspect-ratio: 5 / 3;'"> </div>
+                </div>
+                <div class="d-flex flex-row">
+
+                    <div class="d-flex flex-column" th:if="${#lists.size(legandName) > 0}">
+                        <div class="d-flex flex-row mt-4 text-left" th:each="i : ${#numbers.sequence( 0, #lists.size(legandName)-1, 1)}">
+                            <span class="legend d-flex flex-row" th:style="'background-color: ' + ${legandColor.get(i)} + ';'"></span>
+                            <span class="d-flex flex-row" th:text="${legandName.get(i)}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="activity-view">
+
+            <div class="row d-flex justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <div th:each="activity, iter : ${activities}" th:id="${activity.description}+${activity.id} + 'activityDetails'" class="activityDetails container"  hidden="hidden" style="margin:2%; background-color: #FFFFFF; padding:2%;">
+
+                        <div class="row">
+                            <div class="col d-flex justify-content-start align-items-start">
+                                <button class="btn btn-outline-dark" th:onclick="myFunction(/*[[${iter.index} + 'activityDetails']]*/)">X</button>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <p class="h2" style="color: #3C6E71; padding: 3%" th:text="${activity.type}"></p>
+                            </div>
+                            <div class="col d-flex justify-content-end align-items-start">
+                                <a th:if="${canEdit[iter.index]}" class="btn btn-outline-dark"
+                                   th:href="@{/editActivity(id=${activity.id})}" >Edit</a>
+                                <button th:unless="${activity.type.toString() == 'TRAINING'}" th:id="'teamStats' + ${iter.index}" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modal" onclick="changeModal(this.getAttribute('activityId'))" th:activityId="${activity.id}">Stats</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column">
+                            <div class="p-2 bd-highlight">
+                                <p class="h4"  th:text="${activity.description}"></p>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <p class="h5"  th:text="'Starting: ' + ${#strings.substring(activity.startDate, 8, 10)}+ '/' +${#strings.substring(activity.startDate, 5, 7)}+ '/' +${#strings.substring(activity.startDate, 0, 4)} + ' ' + ${#strings.substring(activity.startDate, 11)}"></p>
+                                <p class="h5"  th:text="'Ending: ' + ${#strings.substring(activity.endDate, 8, 10)}+ '/' +${#strings.substring(activity.endDate, 5, 7)}+ '/' +${#strings.substring(activity.endDate, 0, 4)} + ' ' + ${#strings.substring(activity.endDate, 11)}"></p>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <p class="h5"  th:text="'At ' + ${activity.location}"></p>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a th:if="${activity.team != null} " th:text="${activity.team.name} + ' Profile Page'"
+                                   th:href="@{/teamProfile(id=${activity.team.id})}" class="dark-button-md"></a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div th:unless="${activity.type.toString() == 'TRAINING'}" th:replace="~{fragments/activityStats/activityGameStatsModal.html :: activityGameStatsModal}"></div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        const Calendar = tui.Calendar;
+
+        const container = document.getElementById(/*[[${id}]]*/);
+        const options = {
+            calendars: [
+                {
+                    id: 'cal1',
+                    name: 'Work',
+                },
+            ],
+            isReadOnly: true,
+        };
+
+        const calendar = new Calendar(container, options);
+
+
+        calendar.createEvents(/*[(${events})]*/)
+        calendar.changeView('month');
+
+        console.log(/*[(${events})]*/);
+
+
+
+        calendar.on('clickEvent', ({ event }) => {
+            view(event)
+        });
+
+        calendar.render()
+
+        const dateDisplay = document.getElementById(/*[[${id} + 'date']]*/)
+
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        function displayDate() {
+            const date = calendar.getDate();
+            dateDisplay.textContent = monthNames[date.getMonth()] + " " + date.getFullYear();
+        }
+
+
+        async function setup() {
+            setTimeout(0)
+            displayDate()
+        }
+        setup()
+
+        function next() {
+            calendar.next()
+            displayDate()
+        }
+
+        function last() {
+            calendar.prev()
+            displayDate()
+        }
+        /*]]>*/
+    </script>
+</div>

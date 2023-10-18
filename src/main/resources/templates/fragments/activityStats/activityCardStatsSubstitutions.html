@@ -1,0 +1,67 @@
+<div th:fragment="activityCardStatsSubstitutions">
+    <div class="container">
+        <div class="row justify-content-md-center text-center">
+            <h2>Substitutions</h2>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center gap-3">
+        <div class="dropdown">
+            <div class="dropdown d-flex flex-column align-items-center">
+                <button class="btn dropdown-toggle" type="button" id="teamDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-label="teamDropdownMenuButton">
+                    <img id="teamImage" src="/images/activityStatistics/teams.svg" alt="Team Profile Picture" style="width: 65px; height: 65px;">
+                </button>
+                <ul id="teamButtons" class="dropdown-menu" aria-labelledby="teamDropdownMenuButton">
+                    <li><a id="teamSubsitutionButton" class="dropdown-item"></a></li>
+                    <li><a id="oppositionSubstitutionButton" class="dropdown-item"></a></li>
+                </ul>
+                <p id="teamLabel">Teams</p>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropdown d-flex flex-column align-items-center">
+                <button class="btn dropdown-toggle" type="button" id="onPlayerDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-label="onPlayerDropdownMenuButton">
+                    <img id="onPlayerImage" src="images/activityStatistics/person.svg" alt="On Player Profile Picture" style="width: 65px; height:65px">
+                </button>
+                <ul id="onPlayersButtons" class="dropdown-menu" aria-label="onPlayerButtons">
+                </ul>
+                <p id="onPlayerLabel">On</p>
+            </div>
+        </div>
+        <img src="images/activityStatistics/substitutionIcon.svg" alt="" style="width: 65px;">
+        <div class="dropdown">
+            <div class="dropdown d-flex flex-column align-items-center">
+                <button class="btn dropdown-toggle" type="button" id="offPlayerDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" aria-label="offPlayerDropdownMenuButton">
+                    <img id="offPlayerImage" src="images/activityStatistics/person.svg" alt="Off Player Profile Picture" style="width: 65px; height:65px">
+                </button>
+                <ul id="offPlayersButtons" class="dropdown-menu" aria-label="offPlayerButtons">
+                    <li><button class="dropdown-item" value="John">John</button></li>
+                    <li><button class="dropdown-item" value="Jane">Jane</button></li>
+                </ul>
+                <p id="offPlayerLabel">Off</p>
+            </div>
+        </div>
+        <div id="errorSubstitute" class="text-danger"></div>
+        <div class="d-flex align-items-center">
+            <input type="text" id="substitutionTimeInput" aria-label="substitutionTimeInput"  class="form-control" placeholder="Minute">
+            <div id="errorSubMinute" class="text-danger"></div>
+
+        </div>
+        <button class="btn" onclick="checkInput()" id="addSubstitutionDropdown"><img src="images/activityStatistics/addCircle.svg" alt="Add Icon" style="width: 45px;"></button>
+    </div>
+    <!-- Scoring stats -->
+    <div class="table-responsive">
+        <table class="table align-middle" id="activitySubstitutions">
+            <thead>
+            <tr>
+                <th scope="col">Team</th>
+                <th scope="col">On</th>
+                <th scope="col">Off</th>
+                <th scope="col">Time</th>
+            </tr>
+            </thead>
+            <tbody id="activitySubstitutionsTableBody">
+            </tbody>
+        </table>
+    </div>
+    <script th:src="@{/javascript/activity_substitutions.js}" defer></script>
+</div>

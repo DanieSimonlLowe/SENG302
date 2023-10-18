@@ -1,0 +1,60 @@
+<!-- Scoring form -->
+<link th:href="@{/css/activityStatsScoring.css}" rel="stylesheet" type="text/css"/>
+<div th:fragment="activityCardStatsScoring">
+    <div class="container">
+        <div class="row justify-content-md-center text-center">
+            <h2>Score</h2>
+        </div>
+    </div>
+    <!-- Score input -->
+    <div class="d-flex flex-column flex-md-row justify-content-center gap-4 mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <img id="teamImageScoring" style="width:65px; height: 65px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <input type="text" id="scoreInputTeam1" class="form-control">
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <img id="oppositionImageScoring" style="width:65px; height: 65px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <input type="text" id="scoreInputTeam2" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <!-- Error messages -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="errorTextTeam1" class="text-center text-danger"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="errorTextTeam2" class="text-center text-danger"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring stats -->
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 7%">Team</th>
+                <th scope="col" style="width: 30%">Player</th>
+                <th scope="col" style="width: 30%">Time</th>
+                <th scope="col" style="width: 13%">Points</th>
+            </tr>
+            </thead>
+            <tbody id="scoreTable">
+            <div id="errorScoreInput" class="text-danger" for="scoreTable" style="text-align: center;"></div>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Java Script -->
+    <script th:src="@{/javascript/activity_scoring.js}" defer></script>
+</div>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/profilepageStyles.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/profilePic.css}" rel="stylesheet" type="text/css"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+<!-- input Header nav bar -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+<!-- Users profile -->
+<!-- Start of profile view -->
+<section>
+    <div style="margin: 0 5% 0 5% ">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-md-9 col-lg-7 col-xl-7">
+                    <div class="card-body p-2">
+                        <div class="d-flex text-black position-relative">
+                            <div class="flex-shrink-0 image-hover-container position-relative">
+                                <img th:src="@{${image}}"
+                                     alt="User Image" class="img-fluid rounded-circle opaque-image"
+                                     style="width: 180px; height: 180px; border-radius: 10px;">
+                            </div>
+                            <div class="flex-grow-1 pt-5 ms-3">
+                                <h5 id="fName" class="mb-1 text-center h1" th:text="${fName + ' ' + lName}"></h5>
+                                <p th:if="${shown}" id="sportsDisplay" class="mb-2 pb-1 fst-italic" style="color: #2b2a2a;"
+                                   th:text="${noSports} ? 'This user has no sports to display' : ${favSportsString}"></p>
+                                <div th:if="${shown}" class="d-flex justify-content-evenly my-3 pb-1">
+                                    <p id="dateOfBirthDisplay" style="color: #2b2a2a;" th:text="${dateOfBirth}"></p>
+                                    <p id="emailDisplay" style="color: #2b2a2a;" th:text="${email}"></p>
+                                    <span th:if="${canFollow}">
+                                    <form th:if="${isLoggedIn}" method="post" th:action="@{follow}">
+
+                                        <input type="hidden" th:value="${userId}" name="id">
+                                        <h4>
+                                            <input type="submit" class="dark-button-md btn-primary" value="Follow" id="userFollowBtn">
+                                        </h4>
+
+                                    </form>
+                                        </span>
+                                    <span th:unless="${canFollow}">
+                                    <form th:if="${isLoggedIn}" method="post" th:action="@{unfollow}">
+
+                                            <input type="hidden" th:value="${userId}" name="id">
+                                        <h4>
+                                            <input type="submit" class="dark-button-md btn-primary" value="Unfollow" id="userUnFollowBtn">
+                                        </h4>
+                                        </form>
+                                        </span>
+
+
+                                </div>
+                                <p th:if="${friends}" id="friendsDisplay" style="color: #2b2a2a;">Friends</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+
+</section>
+
+<div th:if="${shown}" class="container">
+    <div class="row">
+
+        <div class="col" th:if="${noTeams}">
+            <!-- If the user has no teams, fill the whole page. -->
+            <span></span>
+        </div>
+
+        <div class="col-8" th:unless="${noTeams}">
+            <span>
+
+            </span>
+            <!-- This div displays the users posts -->
+        </div>
+        <div class="col" th:unless="${noTeams}">
+            <p class="text-lg-center h2"> Teams </p>
+            <ul class="list-group- list-group-light" id="teamList">
+                <li class="list-group-item" th:each="index : ${#numbers.sequence(0,teamNames.size()-1)}">
+                    <div class="d-flex justify-content-between">
+                        <p class="text-start" th:text="${teamNames[index]}"></p>
+                        <p class="text-sm-end fst-italic" th:text="${teamRoles[index]}"></p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Users profile end -->
+
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+
+<script th:src="@{/javascript/profilePic.js}" type="text/javascript" defer></script>
+
+</body>
+</html>

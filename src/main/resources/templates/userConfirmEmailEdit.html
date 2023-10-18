@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link th:href="@{/css/loginStyles.css}" rel="stylesheet" type="text/css"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+  </head>
+  <body>
+      <!-- Navbar fragment -->
+      <!-- <header th:insert="fragments/general.html :: header" style="height: 73px;"></header> -->
+      <!-- Navbar fragment -->
+      <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+      <div class="homepage-body">
+          <!-- Create an account "title" -->
+          <div class="centered-text">
+              <span>you will need to confirm your new email address and log back in if you change your email.</span>
+          </div>
+          <div class="centered-text">
+              <span>are you sure you want to change your email?</span>
+          </div>
+
+          <div class="login-form-container">
+              <form th:action="@{confirmEmailEdit}" method="post">
+
+                  <div class="flex-bottom-container">
+                      <input type="hidden" th:name="email" th:value="*{email}" />
+                      <button type="submit" class="dark-button-md">yes</button>
+                      <a id="sign-up" th:href="@{/edit}" class="dark-button-md">no</a>
+                  </div>
+              </form>
+        </div>
+
+
+      </div>
+      <div th:insert="~{fragments/general.html :: general_footer}"></div>
+  </body>
+</html>

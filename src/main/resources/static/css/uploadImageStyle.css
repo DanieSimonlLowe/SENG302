@@ -1,0 +1,24 @@
+#profile_button {
+    background-color: lightcyan;
+    border: none;
+    cursor: pointer;
+    color: #49b2e8;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+#profile_div {
+    padding: 20%;
+}
+
+input::file-selector-button {
+    background-color: lightcyan;
+    border: none;
+    cursor: pointer;
+    color: #49b2e8;
+    font-size: 16px;
+    padding: 15px 15px;
+    border-radius: 4px;
+}
+

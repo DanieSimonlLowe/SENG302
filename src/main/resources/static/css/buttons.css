@@ -1,0 +1,80 @@
+.dark-button-md {
+    background-color: #82cbef  ;
+    border: none;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.dark-button-md:hover {
+    cursor: pointer;
+    background-color: #82cbef  ;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-drk-btn {
+    background-color: #82cbef  ;
+    border: none;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.pagination-drk-btn:hover {
+    cursor: pointer;
+    background-color: #49b2e8  ;
+}
+
+.pagination-lgt-btn {
+    background-color: white;
+    border: none;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: #353535;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.pagination-lgt-btn:hover {
+    cursor: pointer;
+    background-color: #E5E5E5;
+}
+
+.light-button-md {
+    background-color: white;
+    border: none;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: #353535;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.light-button-md:hover {
+    cursor: pointer;
+    background-color: #E5E5E5;
+    color: #353535;
+    text-decoration: none;
+    padding: 10px 25px;
+    font-size: 16px;
+}

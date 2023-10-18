@@ -1,0 +1,27 @@
+.dragged {
+    opacity: 0.5;
+}
+
+.position-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.position-container span {
+    margin-top: 5px;
+}
+
+.scrollable-area {
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+    overflow: scroll;
+}
+
+.popover-body {
+    max-height: 200px;
+    overflow-y: auto;
+    white-space:pre-wrap;
+}

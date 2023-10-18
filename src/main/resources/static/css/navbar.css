@@ -1,0 +1,49 @@
+.navbar {
+    margin-bottom: 0;
+}
+
+.notificationDisplay {
+    margin-top: 5.5rem;
+    margin-right: 2rem;
+    max-height: 15rem;
+    background-color: #49b2e8  ;
+}
+
+.nav-image {
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 30px;
+}
+
+.nav-sub-image {
+    font-size: 10px;
+    'opsz' 10
+}
+
+.alertTimeAgo {
+    font-size:0.8rem;
+    color:#000;
+}
+
+.notification-info {
+    font-size:1rem;
+    color:#000;
+}
+
+.notification-item {
+    padding:10px;
+    text-decoration:none;
+}
+
+.notificationLinkContainer {
+    margin:none;
+    text-decoration:none;
+}
+
+.unreadAlertDot {
+    height: 5px;
+    width: 5px;
+    background-color: #00ce4f;
+    border-radius: 50%;
+    display: inline-block;
+}

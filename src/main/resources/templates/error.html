@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/errorStyles.css}" rel="stylesheet" type="text/css"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+
+</head>
+<body>
+    <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+        <div class="error-body">
+            <h2>Oh oh!</h2>
+            <h5>An error has occurred and are sorry for the inconvenience. Were working as hard as
+            possible to fix the problem.</h5>
+            <br/>
+
+            <div class="error-message">
+                <h5>Return <a th:href="@{/}">back home</a> ...</h5>
+            </div>
+            <div class="game-container">
+                <h5>Meanwhile relax with some snake or return <a th:href="@{/}">back home</a> ...</h5>
+                <div class="d-flex justify-content-center"> <!-- Center the content horizontally -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="score">Score: 0</div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div id="highScore">High Score: 0</div>
+                            </div>
+                        </div>
+                </div>
+                <canvas id="board" style="width: 400px;"></canvas>
+                <div id="gameOverScreen" class="hidden">
+                    <h1>Game Over</h1>
+                    <p>Press 'R' to Restart</p>
+                </div>
+            </div>
+        </div>
+
+       <div th:insert="~{fragments/general.html :: general_footer}"></div>
+
+<!-- Javascript -->
+<script th:src="@{/javascript/snakeGame.js}" type="text/javascript" defer></script>
+<!-- End of Javascript -->
+</body>
+</html>

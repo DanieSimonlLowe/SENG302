@@ -1,0 +1,74 @@
+.homepage-body {
+    margin-right: 30%;
+    margin-left: 30%;
+    margin-top: 15px;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.tab-title {
+    font-size: 30px;
+}
+
+.centered-text {
+    text-align: center;
+    margin: 40px;
+}
+
+.login-form-container {
+    position: relative;
+}
+
+.login-form-container input {
+    width: 100%;
+    padding: 12px 0;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.login-form-container .input-field {
+    margin-bottom: 35px;
+}
+
+.login-form-container input:hover {
+    border-color: #49b2e8 ;
+}
+
+.login-form-container .error-input {
+    border-color: red;
+}
+
+.login-form-container .error-input:hover {
+    border-color: darkred;
+}
+
+.login-form-container .error-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: red;
+    font-weight: lighter;
+    margin-top: 0;
+}
+
+.login-form-container label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+}
+
+.flex-bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.sign-up-container {
+    text-align: center;
+    font-size: 16px;
+    font-weight: lighter;
+    color: #49b2e8 ;
+}
+
+.requiredField:before { 
+    content:"*";     
+    color: red; 
+}

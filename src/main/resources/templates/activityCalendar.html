@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Analytics Builder</title>
+    <div th:replace="~{fragments/general.html :: general_header}"></div>
+    <script th:src="@{/javascript/activity_general.js}" defer></script>
+</head>
+<body>
+
+
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+<section class="card" style="margin: 2% 2% 0% 2%">
+    <div class="d-flex flex-column ps-sm-3 pe-3 p-4">
+        <div th:replace="~{fragments/calendar.html :: calendar (id='calendar', events=${activitiesJavaScript},
+     onClick='view', legandName=${  {}}, legandColor=${ {} } )}"></div>
+    </div>
+</section>
+
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    let shown = 0;
+    let displays = [];
+
+    function view(data) {
+        if (displays.length > 0) {
+            displays[0].hidden = true; // Hide the currently displayed element
+            displays.pop()
+        }
+        document.getElementById(data.id + 'activityDetails').hidden = false;
+        displays.push(document.getElementById(data.id + 'activityDetails'))
+        document.getElementById(data.id + 'activityDetails').scrollIntoView();
+    }
+
+    function myFunction(activityId) {
+        displays[0].hidden = true; // Hide the currently displayed element
+        displays.pop()
+    }
+
+
+    /*]]>*/
+</script>
+</body>
+</html>

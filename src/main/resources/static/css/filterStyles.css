@@ -1,0 +1,96 @@
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+    background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.filter-content {
+    padding: 0 18px;
+    /* display: none; */
+    /* overflow: hidden; */
+    /* background-color: #f1f1f1; */
+    margin: 5px auto 10px;
+    width: 77.5%;
+    position: relative;
+    transition: max-height 0.3s ease-out;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.filter-container {
+    display: inline-block;
+    z-index: 1;
+}
+
+.filter-container .filter {
+    margin: 10px;
+}
+/* Bottom right apply filters button */
+.submit-button {
+    position: relative;
+    right: 5px;
+    bottom: 5px;
+}
+
+
+.multiselect {
+    width: 200px;
+    margin: 5px;
+}
+
+.selectBox {
+    position: relative;
+    background-color: #49b2e8 ;
+}
+
+.selectBox select {
+    background-color: #d8d8d8;
+    width: 100%;
+    font-weight: bold;
+    padding: 8px;
+    color: black;
+    border: none;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxesSport {
+    display: none;
+    border: 1px #dadada solid;
+    z-index: 10;
+    position:absolute;
+    overflow: visible;
+    background-color: #fcfcfc;
+    width: 200px;
+}
+
+#checkboxesSport label {
+    display: block;
+}
+
+#checkboxesSport label:hover {
+    background-color: #49b2e8 ;
+}
+
+#checkboxesCities {
+    display: none;
+    border: 1px #dadada solid;
+    z-index: 10;
+    position:absolute;
+    overflow: visible;
+    background-color: #fcfcfc;
+    width: 200px;
+}
+
+#checkboxesCities label {
+    display: block;
+}
+
+#checkboxesCities label:hover {
+    background-color: #1e90ff;
+}

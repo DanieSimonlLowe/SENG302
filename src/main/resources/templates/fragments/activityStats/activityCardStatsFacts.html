@@ -1,0 +1,53 @@
+<div th:fragment="activityCardStatsFacts">
+    <form method="post">
+        <label class="form-label requiredField" for="factDesc">Description</label>
+        <p id="charCount">0/150 chars</p>
+        <textarea type="text" class="form-control" style="height: 200px" aria-label="With textarea" placeholder=" "
+                  id="factDesc"
+                  oninvalid="this.setCustomValidity('Add a description for your fact.')"
+                  oninput="setCustomValidity('')" maxlength="150" required autofocus></textarea>
+<!--        <label class="invalid-feedback" id="errorFactDesc"></label>-->
+        <div id="errorFactDesc" class="text-danger"></div>
+
+
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <div class="form-outline">
+                    <label class="form-label requiredField" for="factTime">Fact Start Time:</label>
+                    <input type="text" id="factTime" class="form-control form-control-lg" placeholder="minutes" pattern="^\d+$" required autofocus>
+                    <small>Format: Number of minutes since activity start (e.g., 30)</small>
+                    <div id="errorFactTime" class="text-danger"></div>
+
+                </div>
+            </div>
+            <div class="col-4" style="align-content: end;display: grid;">
+                <button type="button" class="btn btn-success btn-lg" id="submit" style="margin-top: 1%" onclick="checkFact()">Submit</button>
+            </div>
+        </div>
+
+        <input id="factActId" hidden readonly/>
+
+    </form>
+
+    <br>
+
+    <table class="table-responsive" id="activityFacts">
+        <thead>
+        <tr>
+            <th scope="col" style="width: 70%">FACT</th>
+            <th scope="col" style="width: 20%">TIME</th>
+            <th scope="col" style="width: 10%"></th>
+        </tr>
+        </thead>
+        <tbody id="activityFactsTableBody">
+        <tr >
+            <div class="noUsersDisplay" ></div>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Java Script -->
+    <script th:src="@{/javascript/activity_facts.js}" defer></script>
+
+</div>

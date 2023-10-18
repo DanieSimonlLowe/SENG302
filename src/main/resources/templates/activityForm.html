@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/registrationStyles.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/formation.css}" rel="stylesheet"/>
+    <link th:href="@{/css/lineupStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/stepperStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/activityFormStyles.css}" rel="stylesheet"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+<!-- input Header nav bar -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+
+<div class="p-2 bg-light card" style="margin: 2.5% 15% 0 15%">
+    <form th:action="@{activityForm}" method="post" id="activityForm">
+        <input type="hidden" id="id" th:name="id" th:value="${displayId}"/>
+        <!-- Navigation Stepper -->
+        <div th:insert="~{fragments/activityStepper.html}"></div>
+        <!-- Form Body -->
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overviewTab" role="tabpanel">
+                <div class="d-flex flex-column mt-5">
+                    <div class="d-flex justify-content-center">
+                        <h1>Activity Details</h1>
+                    </div>
+                    <div>
+                        <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                            <label for="actDesc" class="form-label requiredField">Description</label>
+                            <textarea class="form-control" rows="5"
+                                      id="actDesc" th:text="${description}" th:name="actDesc"
+                                      oninvalid="this.setCustomValidity('Please enter an appropriate description for the activity.')"
+                                      oninput="setCustomValidity('')" th:classappend="${descError} ? is-invalid" required autofocus></textarea>
+                            <label class="invalid-feedback" th:text="${descError}" id="descError"></label>
+                        </div>
+                        <div class="d-flex flex-column flex-xl-row mt-4 ms-sm-5 me-sm-5 p-3">
+                            <div class="flex-grow-1 mb-4 mb-xl-0 me-xl-3">
+                                <label for="actStart" class="form-label requiredField">Start</label>
+                                <input type="datetime-local" id="actStart" class="form-control form-control-lg"
+                                       th:value="${start}" th:name="actStart" th:classappend="${startTimeError} ? is-invalid" required autofocus/>
+                                <label class="invalid-feedback" th:text="${startTimeError}" id="startTimeError"></label>
+                            </div>
+                            <div class="flex-grow-1 ms-xl-3">
+                                <label class="form-label requiredField" for="actEnd">End</label>
+                                <input type="datetime-local" id="actEnd" class="form-control form-control-lg"
+                                       th:value="${end}" th:name="actEnd" th:classappend="${endTimeError} ? is-invalid" required autofocus/>
+                                <label class="invalid-feedback" th:text="${endTimeError}"id="endTimeError"></label>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column flex-xl-row mt-4 ms-sm-5 me-sm-5 p-3">
+                            <div class="flex-fill mb-4 mb-xl-0 me-xl-3">
+                                <label class="form-label" for="actTeam">Team</label>
+                                <select class="form-select form-select-lg requiredField" id="actTeam"
+                                        aria-label="Activity Team" th:id="actTeam" th:name="actTeam"
+                                        th:value="${actTeam}" th:classappend="${teamError} ? is-invalid">
+                                    <option th:value=0 th:selected="${actTeam == 0}">None</option>
+                                    <option th:each="team : ${dropdownTeams}"
+                                            th:value="${team.getId()}"
+                                            th:text="${team.getName()}"
+                                            th:selected="${team.getId() == actTeam}"></option>
+                                </select>
+                                <label class="invalid-feedback" th:text="${teamError}" id="teamError"></label>
+                            </div>
+                            <div class="flex-fill mb-4 mb-xl-0 me-xl-3 d-none" id="actOppositionDisplay">
+                                <label class="form-label" for="actOpposition">Opposition</label>
+                                <select class="form-select form-select-lg" id="actOpposition"
+                                        aria-label="Activity Opposition" th:id="actOpposition" th:name="actOpposition"
+                                        th:value="${actOpposition}" th:classappend="${teamError} ? is-invalid">
+                                    <option th:value=0 th:selected="${actOpposition == 0}">None</option>
+                                    <option th:each="opposition : ${dropdownOpposition}"
+                                            th:value="${opposition.getId()}"
+                                            th:text="${opposition.getName()}"
+                                            th:selected="${opposition.getId() == actOpposition}"></option>
+                                </select>
+                                <label class="invalid-feedback" th:text="${teamError}" id="oppositionError"></label>
+                            </div>
+                            <div class="flex-fill ms-xl-3">
+                                <label class="form-label requiredField" for="actType">Type</label>
+                                <select class="form-select form-select-lg requiredField" aria-label="Activity Type"
+                                        id="actType" th:value="${actType}" th:id="actType" th:name="actType"
+                                        th:classappend="${typeError} ? is-invalid" required autofocus>
+                                    <option id="None" th:value="None" th:selected="${actType == 'None'}">Select a type</option>
+                                    <option id="game" th:value="game" th:selected="${actType == 'game'}">Game</option>
+                                    <option id="friendly" th:value="friendly" th:selected="${actType == 'friendly'}">Friendly</option>
+                                    <option id="training" th:value="training" th:selected="${actType == 'training'}">Training</option>
+                                    <option id="competition" th:value="competition" th:selected="${actType == 'competition'}">Competition</option>
+                                    <option id="other" th:value="other" th:selected="${actType == 'other'}">Other</option>
+                                </select>
+                                <label class="invalid-feedback" th:text="${typeError}" id="typeError"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Overview Tab -->
+            <!-- Start Location Tab -->
+            <div class="tab-pane fade" id="locationTab" role="tabpanel">
+                <div class="d-flex flex-column mt-5">
+                    <div class="d-flex justify-content-center">
+                        <h1>Activity Location</h1>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <label for="form-address1" class="form-label requiredField">Address 1</label>
+                        <input type="text" id="form-address1" list="location-list" class="form-control form-control-lg"
+                               th:name="address1" th:value="${address1}" data-cy="address1" autocomplete="off"
+                               placeholder="Start typing the address..."
+                               oninput="onInput()" th:classappend="${invalidAddress1} ? is-invalid" autofocus required/>
+                        <label class="invalid-feedback" th:text="${invalidAddress1}" id="address1Error"></label>
+                        <datalist id="location-list"></datalist>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <label for="form-address2" class="form-label">Address 2</label>
+                        <input type="text" id="form-address2" class="form-control form-control-lg"
+                               th:name="address2" th:value="${address2}" data-cy="address2"
+                               th:classappend="${invalidAddress2} ? is-invalid" autofocus/>
+                        <label class="invalid-feedback" th:text="${invalidAddress2}" id="address2Error"></label>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 mb-md-0">
+                                <label class="form-label requiredField" for="form-postcode">Postcode</label>
+                                <input type="text" id="form-postcode" class="form-control form-control-lg"
+                                       th:name="postcode" th:value="${postcode}" data-cy="postcode"
+                                       th:classappend="${invalidPostcode} ? is-invalid" autofocus required/>
+                                <label class="invalid-feedback" th:text="${invalidPostcode}" id="postcodeError"></label>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label" for="form-suburb">Suburb</label>
+                                <input type="text" id="form-suburb" class="form-control form-control-lg"
+                                       th:name="suburb" th:value="${suburb}" data-cy="suburb"
+                                       th:classappend="${invalidSuburb} ? is-invalid"/>
+                                <label class="invalid-feedback" th:text="${invalidSuburb}" id="suburbError"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="form-outline">
+                            <label for="form-city" class="form-label requiredField">City</label>
+                            <input type="text" id="form-city" class="form-control form-control-lg"
+                                   th:name="city" th:value="${city}" data-cy="city"
+                                   th:classappend="${invalidCity} ? is-invalid" autofocus required/>
+                            <label class="invalid-feedback" th:text="${invalidCity}" id="cityError"></label>
+                        </div>
+                    </div>
+                    <div class="mt-4 ms-sm-5 me-sm-5 p-3">
+                        <div class="form-outline">
+                            <label for="form-country" class="form-label requiredField">Country</label>
+                            <input type="text" id="form-country" class="form-control form-control-lg"
+                                   th:name="country" th:value="${country}" data-cy="country"
+                                   th:classappend="${invalidCountry} ? is-invalid" autofocus required/>
+                            <label class="invalid-feedback" th:text="${invalidCountry}" id="countryError"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Location Tab -->
+            <!-- Start Line Up Tab -->
+            <div class="tab-pane fade" id="lineupTab" role="tabpanel">
+                <div id="lineupArea">
+                    <div class="row">
+                        <div class="col">
+                            <div class="scrollable-area">
+                                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 align-items-stretch" id="formationArea">
+                                    <div class="col" id="clearSelectedFormationParent">
+                                        <div class="card text-center" id="clearSelectedFormation" onclick="clearSelectedFormation(this)">
+                                            <h5 class="card-header">
+                                                <span>0</span>
+                                            </h5>
+                                            <div class="card-body">
+                                                <p class="card-text my-auto">No Activity Lineup</p>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <div id="formationArea"></div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col" >
+                            <div class="container">
+                                <div class="row">
+                                    <h2 class="formation-top-text">Bench:</h2>
+                                </div>
+                                <div class="row available_players_div" style="aspect-ratio: 100 / 81;" id="availablePlayers"></div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="input-group justify-content-center"> <!-- this will fail when a number is too large -->
+                                        <input type="text" id="formationNumInput" class="formation-top-text" readonly/>
+                                    </div>
+                                </div>
+                                <div id="formationContainer" class="col" th:style="'background-position: center; background-size: contain; background-repeat:no-repeat; margin: 0 auto;'">
+                                    <div id="formationDisplay" class="d-flex formation-display flex-row justify-content-around" style="aspect-ratio: 26 / 10"></div >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="container">
+                                <div class="row">
+                                    <h2 class="formation-top-text">Substitutions:</h2>
+                                </div>
+                                <div class="row available_players_div" id="substitutionBox" style="height: 200px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="number" hidden="hidden" id="teamIdStore" th:value="${actTeam}" th:name="teamIdStore">
+                        <input type="number" hidden="hidden" id="formationStore" th:value="${formationStore}" value="-1" th:name="formationStore" >
+                        <input type="text" hidden="hidden" id="substitutionStore" th:value="${substitutions}" th:name="substitutions">
+                        <input type="text" hidden="hidden" id="formationPlayerStore" th:value="${players}" th:name="players">
+                    </div>
+                    <div class="row" style="color: red;">
+                        <p th:text="${invalidLineup}" id="formation_message"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Line Up Tab -->
+        <!-- Navigation Buttons -->
+
+        <div class="d-flex justify-content-between mt-4 ms-sm-5 me-sm-5 p-3">
+            <a class="btn btn-danger btn-lg" onclick="history.back()" id="cancel-btn">Cancel</a>
+
+            <div class="navigation-buttons me-3">
+                <button type="button" id="prevButton" class="btn">Previous</button>
+                <button type="button" id="nextButton" class="btn">Next</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- Javascript -->
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+<script th:src="@{/javascript/locationAPI.js}" type="text/javascript" defer></script>
+<script th:src="@{/javascript/lineup.js}" type="text/javascript" defer></script>
+<script type="text/javascript" th:src="@{/javascript/activityValidation.js}" defer></script>
+<script th:inline="javascript">
+    // Defining javascript constants from thymeleaf model attributes
+    const serverDescriptionError = /*[[${descError}]]*/ "";
+    const serverStartTimeError = /*[[${startTimeError}]]*/ "";
+    const serverEndTimeError = /*[[${endTimeError}]]*/ "";
+    const serverTeamError = /*[[${teamError}]]*/ "";
+    const serverTypeError = /*[[${typeError}]]*/ "";
+
+    const serverAddress1Error = /*[[${invalidAddress1}]]*/ "";
+    const serverAddress2Error = /*[[${invalidAddress2}]]*/ "";
+    const serverPostcodeError = /*[[${invalidPostcode}]]*/ "";
+    const serverSuburbError = /*[[${invalidSuburb}]]*/ "";
+    const serverCityError = /*[[${invalidCity}]]*/ "";
+    const serverCountryError = /*[[${invalidCountry}]]*/ "";
+    const serverLineupError = /*[[${invalidLineup}]]*/ "";
+</script>
+</body>
+</html>

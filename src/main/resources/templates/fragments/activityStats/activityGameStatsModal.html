@@ -1,0 +1,53 @@
+<!-- Modal -->
+<div th:fragment="activityGameStatsModal" class="modal fade" id="modal"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="backdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">View Activity Statistics</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <div class="col-2 border-end border-1">
+                            <div class="row-4 " id="pills-tab" role="tablist">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link border-bottom border-1" style="font-weight: bold; color: black">Add Statistics</a>
+                                    </li>
+
+                                    <li id="factButton" class="nav-item">
+                                        <a id="factLink" class="nav-link" data-bs-toggle="tab" onclick="getFacts()" th:data-bs-target="'#facts'" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Facts</a>
+                                    </li>
+                                    <li id="scoringButton" class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" th:data-bs-target="'#scoring'" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Scoring</a>
+                                    </li>
+                                    <li id="substitutionButton" class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" th:data-bs-target="'#substitutions'" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Substitution</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link mt-2 border-bottom border-1" style="font-weight: bold; color: black">View Statistics</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a id="lineupTabButton" class="nav-link" data-bs-toggle="tab" th:data-bs-target="'#lineup'" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Lineup</a>
+                                    </li>
+
+                                </ul>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="tab-content col-10">
+                            <!-- Thymeleaf fragment -->
+                            <div class="tab-pane" th:id="'lineup'" role="tabpanel" th:insert="~{fragments/activityStats/activityCardStatsLineup :: activityCardStatsLineup}"></div>
+                            <div class="tab-pane" th:id="'facts'" role="tabpanel" th:insert="~{fragments/activityStats/activityCardStatsFacts :: activityCardStatsFacts}"></div>
+                            <div class="tab-pane" th:id="'substitutions'" role="tabpanel" th:insert="~{fragments/activityStats/activityCardStatsSubstitutions :: activityCardStatsSubstitutions}"></div>
+                            <div class="tab-pane" th:id="'scoring'" role="tabpanel" th:insert="~{fragments/activityStats/activityCardStatsScoring :: activityCardStatsScoring}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div th:fragment="activity_card_personal (type, description, startTime, endTime, activity, userId, canEdit, iter)" class="card h-100" th:id="'personal' + ${iter.index}">
+    <div>
+        <h5 class="card-header d-flex justify-content-between align-items-center">
+            <span th:id="'personalTitle' + ${iter.index}" th:text="${type}"></span>
+            <div>
+                <button th:id="'personalStats' + ${iter.index}" type="button" class="btn btn-dark" data-bs-toggle="modal" th:data-bs-target="'#modal' + ${iter.index}" >Stats</button>
+                <span th:if="${canEdit[iter.index] == true}"><a class="btn btn-dark" th:href="@{/editActivity(id=${activity.getId()})}">Edit</a></span>
+            </div>
+        </h5>
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+            <p class="card-text my-auto" th:id="'personalDescription' + ${id}" th:text="${description}"></p>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <span th:id="'personalStart' + ${iter.index}" th:text="${#strings.substring(startTime, 0, 10)} + ' ' + ${#strings.substring(startTime, 11)}"></span>
+            <span th:id="'personalEnd' + ${iter.index}" th:text="${#strings.substring(endTime, 0, 10)} + ' ' + ${#strings.substring(endTime, 11)}"></span>
+            <p th:text="${iter.index}"></p>
+        </div>
+    </div>
+    <!--<div th:insert="~{fragments/activityStats/activityGameStatsModal.html :: activityGameStatsModal (activity=${activity})}"></div>-->
+</div>
+
+<div th:fragment="activity_card_team (type, description, teamName, teamId, startTime, endTime, activity, userId, canEdit, iter)" class="card h-100" th:id="'team' + ${iter.index}">
+    <h5 class="card-header d-flex justify-content-between align-items-center">
+        <span th:id="'teamTitle' + ${iter.index}" th:text="${type}"></span>
+        <div>
+            <button th:id="'teamStats' + ${iter.index}" type="button" class="btn btn-dark" data-bs-toggle="modal" th:data-bs-target="'#modal' + ${iter.index}" >Stats</button>
+            <span th:if="${canEdit[iter.index] == true}"><a class="btn btn-dark" th:href="@{/editActivity(id=${activity.getId()})}">Edit</a></span>
+        </div>
+    </h5>
+    <div class="card-body text-center d-flex flex-column justify-content-center">
+        <p class="card-text my-auto" th:id="'teamDescription' + ${iter.index}" th:text="${description}"></p>
+    </div>
+    <ul class="list-group list-group-flush text-center">
+        <li class="list-group-item" th:id="'teamTeam' + ${iter.index}"><a th:text="'Team: ' + ${teamName}" th:href="'/teamProfile?id=' + ${teamId}"></a></li>
+    </ul>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <span th:id="'teamStart' + ${iter.index}" th:text="${#strings.substring(startTime, 0, 10)} + ' ' + ${#strings.substring(startTime, 11)}"></span>
+        <span th:id="'teamEnd' + ${iter.index}" th:text="${#strings.substring(endTime, 0, 10)} + ' ' + ${#strings.substring(endTime, 11)}"></span>
+        <p th:text="${iter.index}"></p>
+    </div>
+    <div th:insert="~{fragments/activityStats/activityGameStatsModal.html :: activityGameStatsModal (activity=${activity})}"></div>
+</div>

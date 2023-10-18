@@ -1,0 +1,108 @@
+<div th:fragment="leaderboard ( topThreeLeaderboardEntities, title, unit)">
+    <div class="shadow-sm rounded-5 p-2">
+        <div class="col">
+
+            <div class="row">
+                <p class="h1 fw-bold text-center mb-4" th:text="${title}"></p>
+            </div>
+
+            <div class="row">
+                <!-- First place -->
+                <div th:if="${topThreeLeaderboardEntities.size() > 0}" class="row w-100">
+                    <div class="d-flex justify-content-center" th:with="entry=${topThreeLeaderboardEntities.get(0)}">
+                        <div class="position-relative">
+                            <div class="d-flex justify-content-center">
+                                <img class="img-fluid rounded-circle" style="border: 5px solid gold; width: 10rem; height: 10rem;" th:src="@{${entry.getUser().getProfilePicName()}}">
+                            </div>
+                            <p class="text-center fw-bold mb-0" th:text="${entry.getUser().getFirstName() + ' ' + entry.getUser().getLastName()}"></p>
+                            <p class="text-center small fst-italic" th:text="${entry.getCount() + ' ' + unit}"></p>
+                            <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                1st.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:unless="${topThreeLeaderboardEntities.size() > 0}" class="row w-100">
+                    <div class="d-flex justify-content-center">
+                        <div class="position-relative">
+                            <div class="d-flex justify-content-center">
+                                <img class="img-fluid rounded-circle" style="border: 5px solid gold; width: 10rem; height: 10rem;" th:src="@{'images/default-img.png'}">
+                            </div>
+                            <p class="text-center fw-bold mb-0">Unclaimed</p>
+                            <p class="text-center small fst-italic" th:text="${#strings.substring(unit, 0, #strings.length(unit)-1) + ' to claim!'}"></p>
+                            <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                1st.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div th:if="${topThreeLeaderboardEntities.size() > 1}" class="col-6">
+                        <!-- Second place -->
+                        <div class="d-flex justify-content-center" th:with="entry=${topThreeLeaderboardEntities.get(1)}">
+                            <div class="position-relative d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center">
+                                    <img class="img-fluid rounded-circle" style="border: 5px solid silver; width: 6rem; height: 6rem;" th:src="@{${entry.getUser().getProfilePicName()}}">
+                                </div>
+                                <p class="text-center small fw-bold mb-0" th:text="${entry.getUser().getFirstName() + ' ' + entry.getUser().getLastName()}"></p>
+                                <p class="text-center fst-italic" style="font-size: .75em" th:text="${entry.getCount() + ' ' + unit}"></p>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                    2nd.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:unless="${topThreeLeaderboardEntities.size() > 1}" class="col-6">
+                        <div class="d-flex justify-content-center">
+                            <div class="position-relative d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center">
+                                    <img class="img-fluid rounded-circle" style="border: 5px solid silver; width: 6rem; height: 6rem;" th:src="@{'images/default-img.png'}">
+                                </div>
+                                <p class="text-center small fw-bold mb-0">Unclaimed</p>
+                                <p class="text-center fst-italic" style="font-size: .75em" th:text="${#strings.substring(unit, 0, #strings.length(unit)-1) + ' to claim!'}"></p>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                    2nd.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${topThreeLeaderboardEntities.size() > 2}" class="col-6">
+                        <!-- Third place -->
+                        <div class="d-flex justify-content-center align-content-center" th:with="entry=${topThreeLeaderboardEntities.get(2)}">
+                            <div class="position-relative d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center">
+                                    <img class="img-fluid rounded-circle" style="border: 5px solid saddlebrown; width: 6rem; height: 6rem;" th:src="@{${entry.getUser().getProfilePicName()}}">
+                                </div>
+                                <p class="text-center small fw-bold mb-0" th:text="${entry.getUser().getFirstName() + ' ' + entry.getUser().getLastName()}"></p>
+                                <p class="text-center fst-italic" style="font-size: .75em" th:text="${entry.getCount() + ' ' + unit}"></p>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                    3rd.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:unless="${topThreeLeaderboardEntities.size() > 2}" class="col-6">
+                        <div class="d-flex justify-content-center align-content-center" >
+                            <div class="position-relative d-flex flex-column justify-content-center align-items-center">
+                                <div class="d-flex justify-content-center">
+                                    <img class="img-fluid rounded-circle" style="border: 5px solid saddlebrown; width: 6rem; height: 6rem;" th:src="@{'images/default-img.png'}">
+                                </div>
+                                <p class="text-center small fw-bold mb-0">Unclaimed</p>
+                                <p class="text-center fst-italic" style="font-size: .75em" th:text="${#strings.substring(unit, 0, #strings.length(unit)-1) + ' to claim!'}"></p>
+                                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                                    3rd.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

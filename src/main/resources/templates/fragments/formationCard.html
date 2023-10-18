@@ -1,0 +1,17 @@
+<div th:fragment="formation_card_lineup (id, formationText, formationSport)" class="card text-center" th:id="'formationCard' + ${id}" onclick="updateFormationLayout(this.getAttribute('data-formationText'), this.getAttribute('data-id'), this, this.getAttribute('data-background'))" th:data-formationText="${formationText}" th:data-id="${id}" th:data-background="${formationSport}">
+  <h5 class="card-header">
+    <span th:id="'formationCardText' + ${id}" th:text="${formationText}"></span>
+  </h5>
+  <div class="card-body">
+    <p class="card-text my-auto" th:id="'formationCardSport' + ${id}" th:text="${formationSport}"></p>
+  </div>
+</div>
+
+<div th:fragment="formation_card (id, formationText, formationSport)" class="card text-center" th:id="'formationCard' + ${id}">
+  <h5 class="card-header">
+    <span th:id="'formationCardText' + ${id}" th:text="${formationText}"></span>
+  </h5>
+  <div class="card-body">
+    <p class="card-text my-auto" th:id="'formationCardSport' + ${id}" th:text="${formationSport}"></p>
+  </div>
+</div>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link rel="stylesheet" th:href="@{/css/teamProfile.css}">
+    <link rel="stylesheet" th:href="@{/css/teamMemberStyles.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/profilePic.css}"/>
+    <link rel="stylesheet" th:href="@{/css/feedStyles.css}"/>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+    <script defer th:src="@{/javascript/activity_general.js}"></script>
+</head>
+<body>
+<!-- input Header nav bar -->
+<div th:insert="~{fragments/navbars.html :: navbar}"></div>
+<!-- Users profile -->
+<!-- Start of profile view -->
+<div class="card" style="margin: 2% 2% 0% 2%">
+    <ul class="nav nav-tabs justify-content-evenly pe-0" id="profileTabs" role="tablist">
+        <li class="nav-item border" role="presentation" th:style="${isManager ? 'width: 20%' : 'width: 25%'}">
+            <button aria-selected="true" class="nav-link active w-100" data-bs-target="#profile-tab-pane" data-bs-toggle="tab" id="profile-tab"
+                    role="tab" type="button" onclick="selectManageTab(false)">Profile
+            </button>
+        </li>
+        <li class="nav-item border" role="presentation" th:style="${isManager ? 'width: 20%' : 'width: 25%'}">
+            <button aria-selected="false" class="nav-link w-100" data-bs-target="#members-tab-pane" data-bs-toggle="tab" id="members-tab"
+                    role="tab" type="button" onclick="selectManageTab(false)">Team Members
+            </button>
+        </li>
+        <li class="nav-item border" role="presentation" th:style="${isManager ? 'width: 20%' : 'width: 25%'}">
+            <button aria-selected="false" class="nav-link w-100" data-bs-target="#activities-tab-pane" data-bs-toggle="tab" id="activities-tab"
+                    role="tab" type="button" onclick="selectManageTab(false)">Activities
+            </button>
+        </li>
+        <li class="nav-item border" role="presentation" th:style="${isManager ? 'width: 20%' : 'width: 25%'}">
+            <button aria-selected="false" class="nav-link w-100" data-bs-target="#formations-tab-pane" data-bs-toggle="tab" id="formations-tab"
+                    role="tab" type="button" onclick="selectManageTab(false)">Formations
+            </button>
+        </li>
+        <li class="nav-item border" role="presentation" style="width: 20%" th:if="${isManager}">
+            <button aria-selected="false" class="nav-link w-100" data-bs-target="#manage-tab-pane" data-bs-toggle="tab" id="manage-tab"
+                    role="tab" type="button" onclick="selectManageTab(true)">Manage Posts and Comments
+            </button>
+        </li>
+    </ul>
+    <div class="container">
+        <div class="sticky-lg-top d-lg-flex justify-content-evenly border rounded-1 p-1 pt-2 bg-white">
+            <div class="d-flex justify-content-center">
+                <form enctype="multipart/form-data" id="form" method="post" th:action="@{/teamProfile}">
+                    <div th:if="${isManager}">
+                        <div th:replace="~{fragments/profilePicture.html :: profilePictureEditable}"></div>
+                    </div>
+                    <div th:unless="${isManager}">
+                        <div th:replace="~{fragments/profilePicture.html :: profilePicture}"></div>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center">
+                <div>
+                    <p class="text-center h2" id="teamName" th:text="${displayName}"></p>
+                    <a style="color: inherit; text-decoration: inherit;" th:href="@{/clubProfile(clubId=${club.id})}"
+                       th:if="${club}">
+                        <p class="text-sm-center fst-italic" id="clubName" th:text="${club.getName()}"></p>
+                    </a>
+                    <p class="text-sm-center" id="locationString" th:text="${displayLocationString}"></p>
+                    <p class="text-sm-center" id="sport" th:text="${displaySport}"></p>
+                </div>
+            </div>
+            <div style="text-align: center">
+                <p>Use this token to invite people to your team!</p>
+                <input aria-describedby="basic-addon1" class="text-sm-center" id="inviteToken" placeholder="Team Invitation Token"
+                       readonly th:name="inviteToken" th:value="*{inviteToken}" type="text">
+                <div class="mt-3 mt-lg-0 py-2">
+                    <button class="btn btn-light" id="copyTokenBtn" onclick="copyText()" type="button">Copy Token
+                    </button>
+                    <a class="btn btn-light" onclick="resetText()" th:href="@{/regenerateToken(id=${teamId})}">Regenerate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+
+
+    <div class="tab-content" id="myTabContent">
+        <div aria-labelledby="profile-tab" class="tab-pane fade active show" id="profile-tab-pane" role="tabpanel"
+             tabindex="0">
+            <div style="text-align: center" th:if="${isMember}">
+                <a class="btn btn-dark btn-md mx-auto" th:href="@{teamPost(id=${id})}" th:if="${canPost}">Add Post</a>
+                <div th:replace="~{fragments/feedTemplate.html :: feed_template(posts = ${feedPosts}, clubId = -1)}"></div>
+            </div>
+
+            <span class="row align-items-center" th:unless="${isMember}">
+                <div class="jumbotron" style="max-width: 70%; padding-left: 25%;">
+                <h1 class="display-4">Hey!</h1>
+                <p class="lead">You are seeing this because you are not a member of this team! </p>
+                <hr class="my-4">
+                <p>If you think that's a mistake, you can reach out to your manager for an invitation code!</p>
+                <p>Feel free to follow this team if you haven't!</p>
+                </div>
+            </span>
+        </div>
+
+
+        <div aria-labelledby="members-tab" class="tab-pane fade" id="members-tab-pane"
+             role="tabpanel" tabindex="0">
+            <h5 class="mb-1 text-center h1">Team Members</h5>
+            <div class="lists m-4" id="members">
+                <ul class="list-group">
+                    <div class="list-header">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Managers
+                            <span class="badge bg-primary rounded-pill"
+                                  th:text="${managers.size}">Number of Managers</span>
+                        </li>
+                    </div>
+                    <span th:each="entity : ${managers}">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span th:text="${entity.teamMemberId.user.firstName} + ' ' + ${entity.teamMemberId.user.lastName}"> First Name Last Name </span>
+                                    <input hidden th:value="${entity.teamMemberId.user.id}+'Manager'">
+                                    <div class="dropdown" th:if="${isManager}">
+                                      <button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+                                              data-bs-toggle="dropdown" type="button">
+                                        Edit
+                                      </button>
+                                      <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item" disabled type="button">Manager</button></li>
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Coach" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Coach</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Member" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Member</button>
+                                            </form>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                </li>
+                            </span>
+                </ul>
+                <ul class="list-group">
+                    <div class="list-header">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Coaches
+                            <span class="badge bg-primary rounded-pill"
+                                  th:text="${coaches.size}">Number of Coaches</span>
+                        </li>
+                    </div>
+                    <span id="coachesList" th:each="entity : ${coaches}">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span th:text="${entity.teamMemberId.user.firstName} + ' ' + ${entity.teamMemberId.user.lastName}"> First Name Last Name </span>
+                                    <input hidden th:value="${entity.teamMemberId.user.id}+'Coach'">
+                                    <div class="dropdown" th:if="${isManager}">
+                                      <button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+                                              data-bs-toggle="dropdown" type="button">
+                                        Edit
+                                      </button>
+                                      <ul class="dropdown-menu">
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Manager" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Manager</button>
+                                            </form>
+                                        <li><button class="dropdown-item" disabled type="button">Coach</button></li>
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Member" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Member</button>
+                                            </form>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                </li>
+                            </span>
+                </ul>
+                <ul class="list-group">
+                    <div class="list-header">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Members
+                            <span class="badge bg-primary rounded-pill"
+                                  th:text="${members.size}">Number of Members</span>
+                        </li>
+                    </div>
+                    <span id="membersList" th:each="entity : ${members}">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span th:text="${entity.teamMemberId.user.firstName} + ' ' + ${entity.teamMemberId.user.lastName}"> First Name Last Name </span>
+                                    <input hidden th:value="${entity.teamMemberId.user.id}+'Member'">
+                                    <div class="dropdown" th:if="${isManager}">
+                                      <button aria-expanded="false" class="btn btn-secondary dropdown-toggle"
+                                              data-bs-toggle="dropdown" type="button">
+                                        Edit
+                                      </button>
+                                      <ul class="dropdown-menu">
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Manager" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Manager</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="get" th:action="@{teamProfileTemp}">
+                                                <input th:name="id" th:value="${displayId}" type="hidden">
+                                                <input hidden th:name="managerIds" th:value="${managerIds}"
+                                                       type="hidden">
+                                                <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                                                <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                                                <input hidden th:name="userId"
+                                                       th:value="${entity.teamMemberId.user.id}" type="hidden">
+                                                <input hidden th:name="newRole" th:value="Coach" type="hidden">
+                                                <button class="dropdown-item" onclick="populateIds()" type="submit">Coach</button>
+                                            </form>
+                                        </li>
+                                        <li><button class="dropdown-item" disabled type="button">Member</button></li>
+                                      </ul>
+                                    </div>
+                                </li>
+                            </span>
+                </ul>
+                <form method="post" th:action="@{teamMembers}" th:if="${isManager}">
+                    <input hidden th:name="id" th:value="${displayId}" type="hidden">
+                    <input hidden th:name="managerIds" th:value="${managerIds}" type="hidden">
+                    <input hidden th:name="coachIds" th:value="${coachIds}" type="hidden">
+                    <input hidden th:name="memberIds" th:value="${memberIds}" type="hidden">
+                    <button class="dark-button-md" onclick="populateIds()" type="submit">Save Changes</button>
+                    <label class="text-danger" th:text="${status} ? ${status} : ${status}"></label>
+                </form>
+            </div>
+            <!--            </span>-->
+        </div>
+
+
+        <div aria-labelledby="activities-tab" class="tab-pane fade" id="activities-tab-pane"
+             role="tabpanel" tabindex="0">
+            <h5 class="mb-1 text-center h1">Activities</h5>
+            <span th:if="${isMember}">
+                <div th:replace="~{fragments/calendar.html :: calendar (id='calendar', events=${activitiesJavaScript},
+        onClick='view', legandName=${  {}}, legandColor=${ {} } )}"></div>
+            </span>
+        </div>
+
+
+        <div aria-labelledby="formations-tab" class="tab-pane fade" id="formations-tab-pane"
+             role="tabpanel" tabindex="0">
+            <h5 class="mb-1 text-center h1">Formations</h5>
+            <!--            <span th:if="${isMember}">-->
+            <div class="lists" id="formations" style="text-align: center">
+                <a th:href="@{/formations(team=${displayId})}">
+                    <button class="btn btn-light" th:if="${isManager}" type="button">Create New Formation</button>
+                </a>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 m-1 align-items-stretch">
+                    <div th:each="formation, iter : ${teamFormations}">
+                        <div class="col">
+                            <div th:replace="~{fragments/formationCard.html :: formation_card (id=${formation.getId}, formationText=${formation.getPlayersPerSectionString}, formationSport=${formation.getSportName}, iter=${iter})}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="noUsersDisplay pt-3" th:unless="${formationsPresent}"
+                     th:utext="${'This team has no created formations to display.'}"></div>
+            </div>
+            <!--            </span>-->
+        </div>
+
+
+        <div aria-labelledby="manage-tab" class="tab-pane fade" id="manage-tab-pane"
+             role="tabpanel" tabindex="0">
+            <h5 class="mb-1 text-center h1">Manage Posts</h5>
+            <span th:if="${isManager}">
+                <div class="lists" id="manage">
+                    <span th:if="${flaggedPostsPresent}">
+                        <div th:replace="~{fragments/feedTemplate.html :: feed_template(posts = ${flaggedFeedPosts}, clubId = ${clubId})}"></div>
+                    </span>
+                    <div class="noUsersDisplay pt-3" th:unless="${flaggedPostsPresent}"
+                         th:utext="${'This team has no flagged posts or comments to display.'}"></div>
+                </div>
+            </span>
+            <hr/>
+
+            <h5 class="mb-1 text-center h1">Manage Comments</h5>
+            <span th:if="${isManager}">
+                <div class="lists" id="manageComments">
+                    <span th:if="${flaggedCommentsPresent}">
+                        <div th:replace="~{fragments/feedTemplate.html :: comment_flagged(comments = ${flaggedComments}, usersFlagged = ${usersFlagged})}"></div>
+                    </span>
+                    <div class="noUsersDisplay pt-3" th:unless="${flaggedCommentsPresent}"
+                         th:utext="${'This team has no flagged posts or comments to display.'}"></div>
+                </div>
+            </span>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- Users profile end -->
+
+<div th:insert="~{fragments/general.html :: general_footer}"></div>
+<div th:if="${isManager}">
+    <script defer th:src="@{/javascript/profilePic.js}" type="text/javascript"></script>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    window.onload = function () {
+        if (/*[[${flaggedPost}]]*/) {
+            createFlagToast("Your post was flagged, and will be reviewed by a manager before it is visible.");
+        }
+    }
+
+    const displays = [];
+    for (let i = 0; i < /*[(${#lists.size(activities)})]*/; i++) {
+        displays.push(document.getElementById(i + 'activityDetails'))
+    }
+
+    let shown = 0;
+
+    function view(data) {
+        console.log(data)
+        displays[shown].hidden = true;
+        shown = data.id;
+        displays[shown].hidden = false;
+        document.getElementById(displays[shown].id).scrollIntoView();
+    }
+
+    function myFunction(activityId) {
+        document.getElementById(activityId).hidden = true;
+    }
+
+
+    /*]]>*/
+
+    let managerIds = [[${managerIds}]];
+    let coachIds = [[${coachIds}]];
+    let memberIds = [[${memberIds}]];
+    let visibleMembers = [[${isVisibleMembers}]];
+    let visibleFormations = [[${isVisibleFormations}]];
+    let selectedTab = [[${selectedTab}]];
+    if (selectedTab) {
+        const tab = new bootstrap.Tab(document.getElementById(selectedTab));
+        tab.show()
+    }
+
+    const url = window.location.href
+    selectedTab = url.substring(url.indexOf('#') + 1);
+    if (selectedTab) {
+        const tab = new bootstrap.Tab(document.getElementById(selectedTab));
+        tab.show()
+    }
+
+    function copyText() {
+        var inviteToken = document.getElementById("inviteToken");
+        inviteToken.select();
+        inviteToken.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(inviteToken.value);
+        document.getElementById('copyTokenBtn').textContent = 'Copied!';
+    }
+
+    function resetText() {
+        document.getElementById('copyTokenBtn').textContent = 'Copy Token';
+    }
+
+    function populateIds() {
+        let mangerInputs = document.getElementsByName('managerIds');
+        for (let i = 0; i < mangerInputs.length; i++) {
+            mangerInputs[i].value = managerIds
+        }
+        let coachInputs = document.getElementsByName('coachIds');
+        for (let i = 0; i < coachInputs.length; i++) {
+            coachInputs[i].value = coachIds
+        }
+        let memberInputs = document.getElementsByName('memberIds');
+        for (let i = 0; i < memberInputs.length; i++) {
+            memberInputs[i].value = memberIds;
+        }
+    }
+
+    function selectManageTab(isManageTab) {
+        history.pushState("", document.title, window.location.pathname + window.location.search)
+        if (isManageTab) {
+            location = location.href + "#manage-tab";
+            location.reload();
+            const tab = new bootstrap.Tab(document.getElementById(selectedTab));
+            tab.show()
+        }
+    }
+</script>
+<script th:src="@{/javascript/flag_toast.js}" type="text/javascript"></script>
+</body>
+</html>
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/css/allprofilepageStyles.css}" rel="stylesheet">
+    <link th:href="@{/css/filterStyles.css}" rel="stylesheet">
+    <link th:href="@{/css/searchpageStyles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/profilePic.css}" rel="stylesheet"/>
+
+    <script type="text/javascript" th:src="@{/javascript/collapsible_button.js}" defer></script>
+    <div th:insert="~{fragments/general.html :: general_header}"></div>
+</head>
+<body>
+
+    <!-- Navbar fragment -->
+    <div th:insert="~{fragments/navbars.html :: navbar}"></div>
+    <p class="h1 my-2 title text-lg-center">My Teams</p>
+
+    <div class="d-flex justify-content-center align-items-center my-2">
+        <div class="d-flex flex-wrap gap-2 my-2 justify-content-evenly" style="width: 80%">
+            <div th:unless="${entries.empty}" th:each="team, iter : ${entries}">
+
+                <div class="card h-100 d-flex justify-content-center align-items-center hover-card" style="width: 18rem;">
+                    <img class="card-img-top rounded-circle pt-2" style="width: 5rem; height: 5rem;" th:src="@{${team.profilePicName}}" th:alt="${team.name}">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title text-center fw-bold" th:text="${team.name}"></h5>
+                            <p class="card-subtitle text-center" th:text="${team.sport}"></p>
+                        </div>
+                        <p class="card-text text-center small" th:text="${team.location}"></p>
+                        <p class="card-text text-center small fst-italic bottom-0 start-0 end-0 ms-auto me-auto position-absolute" th:text="${teamClubs[iter.index] != null ? 'Member of ' + teamClubs[iter.index].name : ''}"></p>
+                    </div>
+                    <a class="stretched-link " th:href="@{/teamProfile(id=${team.id})}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{fragments/pagination.html}"></th:block>
+
+    <div th:insert="~{fragments/general.html :: general_footer}"></div>
+</body>
+</html>

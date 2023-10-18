@@ -1,0 +1,35 @@
+<div class="pagination mt-5">
+    <nav aria-label="Pagination" th:if="${entries.totalPages > 0 && search != null}">
+        <span th:unless="${page == 1}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=1, search=${search}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}"><<</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence( 1, entries.totalPages, 1)}">
+            <span th:if="${page == i}">
+                <a class="pagination-drk-btn" th:href="@{${pageName}(page=${i}, search=${search}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}" th:text="${i}"></a>
+            </span>
+            <span th:unless="${page == i}">
+                <a class="pagination-lgt-btn" th:href="@{${pageName}(page=${i}, search=${search}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}" th:text="${i}"></a>
+            </span>
+        </span>
+        <span th:unless="${page == entries.getTotalPages}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=${entries.getTotalPages}, search=${search}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}">>></a>
+        </span>
+    </nav>
+
+    <nav aria-label="Pagination" th:if="${entries.totalPages > 0 && search == null}">
+        <span th:unless="${page == 1}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=1, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}"><<</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence( 1, entries.totalPages, 1)}">
+            <span th:if="${page == i}">
+                <a class="pagination-drk-btn" th:href="@{${pageName}(page=${i}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}" th:text="${i}"></a>
+            </span>
+            <span th:unless="${page == i}">
+                <a class="pagination-lgt-btn" th:href="@{${pageName}(page=${i}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}" th:text="${i}"></a>
+            </span>
+        </span>
+        <span th:unless="${page == entries.getTotalPages}">
+            <a class="pagination-drk-btn" th:href="@{${pageName}(page=${entries.getTotalPages}, selectedSports=${selectedSportsString}, selectedCities=${selectedCities})}">>></a>
+        </span>
+    </nav>
+</div>

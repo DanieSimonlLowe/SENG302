@@ -1,0 +1,26 @@
+<div th:fragment="general_header">
+    <link th:href="@{/css/buttons.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/navbar.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}" />
+
+    <meta charset="UTF-8" xmlns:th="https://www.thymeleaf.org">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Analytics Builder.</title>
+
+</div>
+
+<div th:fragment="general_footer">
+    <div class="position-fixed bottom-0 end-0 p-3" id="toastContainer">
+    </div>
+
+    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}"></script>
+    <script th:src="@{/javascript/general.js}"></script>
+</div>
+

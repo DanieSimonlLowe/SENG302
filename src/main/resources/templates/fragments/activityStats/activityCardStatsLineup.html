@@ -1,0 +1,23 @@
+<div th:fragment="activityCardStatsLineup">
+
+    <link th:href="@{/css/lineupStyles.css}" rel="stylesheet"/>
+
+    <div class="container">
+        <div class="row justify-content-md-center text-center">
+            <h2>Lineup</h2>
+        </div>
+    </div>
+
+    <input id="lineupActivityId" hidden readonly/>
+
+    <p id="noLineupOnActivityText" class="text-md-center fst-italic"></p>
+
+    <div class="row-cols-1 row justify-content-center align-items-center">
+        <div id="formationContainer" style="background-position: center; background-size: contain; background-repeat:no-repeat;">
+            <div id="formationDisplay" class="d-flex formation-display justify-content-around" style="aspect-ratio: 26 / 10"></div >
+        </div>
+        <div id="substitutionBox" class="d-flex formation-display justify-content-around"></div>
+    </div>
+
+    <script th:src="@{/javascript/activity_lineup.js}" type="text/javascript" defer></script>
+</div>

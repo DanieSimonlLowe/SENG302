@@ -1,0 +1,90 @@
+<div th:fragment="filterContent" class="">
+    <div class="filter-content" id="filter-content">
+        <div class="filter-container">
+            <div class="filter">
+                <div class="d-flex align-items-end flex-column bd-highlight mb-3">
+                    <button class="p-2 bd-highlight filter-button submit-button dark-button-md" onclick="clearQueryStrings()">Clear</button>
+                    <script>
+                        function clearQueryStrings() {
+                            let currentUrl = window.location.href;
+                            let urlWithoutQuery = currentUrl.split('?')[0];
+                            window.location.href = urlWithoutQuery;
+                        }
+                    </script>
+                </div>
+                <form th:action="@{''}" method="get">
+                    <input type="hidden" id="search" name="search" th:value="${search}">
+                    <th:block th:insert="~{fragments/searchFilters.html :: filterBySport}"></th:block>
+                    <th:block th:insert="~{fragments/searchFilters.html :: filterByCity}"></th:block>
+                    <div class="d-flex align-items-end flex-column bd-highlight mb-3">
+                        <button class="p-2 bd-highlight filter-button submit-button dark-button-md" id="filterButton" type="submit">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:fragment="numEntries">
+    <span>
+        <span th:text="${entries.getNumberOfElements != null} ? ${entries.getNumberOfElements} + ((${page} - 1) * 10) + ' / ' : '0 / '"></span>
+        <strong>
+            <span th:text="${entries.getTotalElements()}"></span>
+        </strong>
+        <span>Entries</span>
+    </span>
+</div>
+
+<div th:fragment="filterBySport" class="multiselect">
+    <div class="selectBox" id="sportDropdown" onclick="showSports()">
+        <select >
+            <option>Filter by Sport</option>
+        </select>
+        <div class="overSelect"></div>
+    </div>
+    <div id="checkboxesSport">
+        <th:block th:if="${allSports == null || allSports.isEmpty()}">
+            <span disabled id="none">No Sports to Filter</span>
+        </th:block>
+        <th:block th:unless="${allSports == null || allSports.isEmpty()}" th:each="sport, iter : ${allSports}">
+            <label th:for="${sport.getSportName()}">
+                <th:block th:if="${#lists.contains(selectedSports, sport.getId())}">
+                    <input name="selectedSports" th:value="${sport.getId()}" type="checkbox" th:id="${sport.getSportName()}" checked/>
+                </th:block>
+                <th:block th:unless="${#lists.contains(selectedSports, sport.getId())}">
+                    <input name="selectedSports" th:value="${sport.getId()}" type="checkbox" th:id="${sport.getSportName()}"/>
+                </th:block>
+
+                <span th:text="${sport.getSportName()}"></span>
+            </label>
+        </th:block>
+    </div>
+</div>
+
+<div th:fragment="filterByCity" class="multiselect">
+    <div class="selectBox" id="cityDropdown" onclick="showCities()">
+        <select >
+            <option>Filter by City</option>
+        </select>
+        <div class="overSelect"></div>
+    </div>
+    <div id="checkboxesCities">
+        <th:block th:if="${allCities == null || allCities.isEmpty()}">
+            <span disabled>No Cities to Filter</span>
+        </th:block>
+        <th:block th:unless="${allCities == null || allCities.isEmpty()}" th:each="city, iter : ${allCities}">
+            <label th:for="${city}">
+                <th:block th:if="${#lists.contains(selectedCities, city)}">
+                    <input name="selectedCities" th:value="${city}" type="checkbox" th:id="${city}" checked/>
+                </th:block>
+
+                <th:block th:unless="${#lists.contains(selectedCities, city)}">
+                    <input name="selectedCities" th:value="${city}" type="checkbox" th:id="${city}"/>
+                </th:block>
+                <span th:text="${city}"></span>
+            </label>
+        </th:block>
+    </div>
+</div>

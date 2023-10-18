@@ -1,0 +1,40 @@
+.profile-container {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.profile-container-small {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.image-selection {
+    transition: .5s ease;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+#profilePicActivator:hover {
+    cursor: pointer;
+}
+
+.opaque-image {
+    transition: .5s ease;
+}
+
+.image-hover-container:hover .opaque-image {
+    opacity: 0.3;
+}
+
+.image-hover-container:hover .image-selection {
+    opacity: 1;
+}
